@@ -1,0 +1,66 @@
+summary: |
+  Full Stack Software Engineer with 5+ years of experience building scalable, cloud-native applications using Java (Streams, Concurrency), Spring Boot, and React with TypeScript. Proven ability to modernize legacy systems, design high-performance APIs, and leverage GenAI tools to accelerate delivery while maintaining production-grade quality.
+
+skills:
+  - category: Languages
+    items: "Python, Java (Streams, Concurrency), JavaScript, TypeScript"
+  - category: Frameworks
+    items: "Spring Boot, FastAPI, React.js, Angular, GraphQL"
+  - category: Cloud & DevOps
+    items: "AWS (S3, AppRunner, CloudWatch), Kubernetes, Jenkins, GitHub Actions"
+  - category: Datastores
+    items: "PostgreSQL (Supabase), MySQL, MongoDB, Firebase RTDB"
+  - category: Messaging
+    items: "Apache Kafka"
+  - category: Testing
+    items: "JUnit 5, Mockito, Jest, Mocha, Chai"
+  - category: Security
+    items: "OAuth 2.0, Secure API Development"
+  - category: GenAI
+    items: "GitHub Copilot, Amazon Q, ChatGPT, Cursor"
+
+experience:
+  - position: "Software Engineer 3 — React.js / Java Spring Boot / GraphQL"
+    organization: "Charter Communications / Spectrum"
+    date: "Jul 2021 -- Present"
+    location: ""
+    bullets:
+      - "Modernized production microservices by migrating Java 8/Jersey systems to Java 17 and Spring Boot 3.x, improving security, performance, and maintainability."
+      - "Built high-throughput Spring Boot APIs using Java Streams, functional patterns, and concurrent processing."
+      - "Developed GraphQL services with Node.js and upgraded React 16 applications to React 18."
+      - "Improved system reliability through Kafka workflow enhancements, resilient DocuSign integrations, and Kubernetes-based debugging."
+      - "Led internal AI enablement and accelerated delivery using Amazon Q and GitHub Copilot."
+  - position: "Software Engineer Intern — Node.js / Python"
+    organization: "CribMD"
+    date: "Apr 2021 -- Jul 2021"
+    location: ""
+    bullets:
+      - "Built backend services using Node.js and MongoDB and designed batch-processing microservices."
+      - "Implemented JIRA Service Desk automation, reducing customer response time by 24 hours."
+      - "Automated onboarding workflows and built structured APIs, reducing frontend effort by 30%."
+      - "Developed unit and integration tests with Mocha and Chai."
+
+projects:
+  - position: 'DesiRoomy {\footnotesize\textcolor{graytext}{\href{https://desiroomy.app}{(desiroomy.app)}}}'
+    organization: ""
+    date: ""
+    location: ""
+    raw_position: true
+    bullets:
+      - "Built a full-stack roommate-matching platform using Supabase (PostgreSQL)."
+      - "Implemented OAuth 2.0 authentication, automated email workflows, and Supabase Edge Functions."
+      - "Integrated PostHog analytics to guide product iteration."
+  - position: "Barely Complicated"
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Built a FastAPI backend for QR code generation, containerized with Docker and deployed on AWS AppRunner."
+      - "Developed a React.js frontend hosted on AWS Amplify."
+  - position: "Find My Operator"
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Built a two-sided platform connecting business owners with operators."
+      - "Implemented secure messaging, search, and filtering features."

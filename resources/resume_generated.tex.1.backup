@@ -1,0 +1,201 @@
+\documentclass[11pt, a4paper]{awesome-cv}
+
+%--------------------------------------------------
+% Page geometry
+%--------------------------------------------------
+\geometry{
+  left=1.2cm,
+  right=1.2cm,
+  top=1.2cm,
+  bottom=1.5cm
+}
+
+%--------------------------------------------------
+% Fonts & colors (neutral, no red)
+%--------------------------------------------------
+\colorlet{awesome}{black}
+\colorlet{darktext}{black}
+\colorlet{text}{black!90}
+\colorlet{graytext}{black!80}
+\setbool{acvSectionColorHighlight}{false}
+
+%--------------------------------------------------
+% Personal information
+%--------------------------------------------------
+\name{Manoj Reddy}{Ponagandla}
+
+\position{\small
+Lake Saint Louis, MO |
++1 (314) 295-0369 |
+\href{mailto:mrponagandla@gmail.com}{mrponagandla@gmail.com} |
+\href{https://linkedin.com/in/manojponagandla}{linkedin.com/in/manojponagandla} |
+\href{https://manojponagandla.com}{manojponagandla.com}
+}
+
+\begin{document}
+
+\makecvheader[L]
+
+%--------------------------------------------------
+% Summary
+%--------------------------------------------------
+\cvsection{Summary}
+
+\begin{cvparagraph}
+Full Stack Software Engineer with 5+ years of experience building scalable, cloud-native applications using Java (Streams, Concurrency), Spring Boot, and React with TypeScript. Proven ability to modernize legacy systems, design high-performance APIs, and leverage GenAI tools to accelerate delivery while maintaining production-grade quality.
+\end{cvparagraph}
+
+%--------------------------------------------------
+% Skills (condensed, Awesome-CV style)
+%--------------------------------------------------
+\cvsection{Skills}
+
+\begin{cvskills}
+\cvskill{Languages}{Python, Java (Streams, Concurrency), JavaScript, TypeScript}
+\cvskill{Frameworks}{Spring Boot, FastAPI, React.js, Angular, GraphQL}
+\cvskill{Cloud \& DevOps}{AWS (S3, AppRunner, CloudWatch), Kubernetes, Jenkins, GitHub Actions}
+\cvskill{Datastores}{PostgreSQL (Supabase), MySQL, MongoDB, Firebase RTDB}
+\cvskill{Messaging}{Apache Kafka}
+\cvskill{Testing}{JUnit 5, Mockito, Jest, Mocha, Chai}
+\cvskill{Security}{OAuth 2.0, Secure API Development}
+\cvskill{GenAI}{GitHub Copilot, Amazon Q, ChatGPT, Cursor}
+\end{cvskills}
+
+%--------------------------------------------------
+% Experience
+%--------------------------------------------------
+\cvsection{Experience}
+
+\cventry
+{Software Engineer 3 — React.js / Java Spring Boot / GraphQL}
+{Charter Communications / Spectrum}
+{Jul 2021 -- Present}
+{}
+{
+\begin{cvitems}
+\item Modernized production microservices by migrating Java 8/Jersey systems to Java 17 and Spring Boot 3.x, improving security, performance, and maintainability.
+\item Built high-throughput Spring Boot APIs using Java Streams, functional patterns, and concurrent processing.
+\item Developed GraphQL services with Node.js and upgraded React 16 applications to React 18.
+\item Improved system reliability through Kafka workflow enhancements, resilient DocuSign integrations, and Kubernetes-based debugging.
+\item Led internal AI enablement and accelerated delivery using Amazon Q and GitHub Copilot.
+\end{cvitems}
+}
+
+\cventry
+{Software Engineer Intern — Node.js / Python}
+{CribMD}
+{Apr 2021 -- Jul 2021}
+{}
+{
+\begin{cvitems}
+\item Built backend services using Node.js and MongoDB and designed batch-processing microservices.
+\item Implemented JIRA Service Desk automation, reducing customer response time by 24 hours.
+\item Automated onboarding workflows and built structured APIs, reducing frontend effort by 30\%.
+\item Developed unit and integration tests with Mocha and Chai.
+\end{cvitems}
+}
+
+%--------------------------------------------------
+% Education
+%--------------------------------------------------
+\cvsection{Education}
+
+\cventry
+{M.S. in Computer Science (Artificial Intelligence)}
+{University of Missouri--St. Louis}
+{Dec 2020}
+{}
+{Artificial Intelligence Graduate Certificate}
+
+\cventry
+{B.Tech. in Computer Science and Engineering}
+{Anurag Group of Institutions, Hyderabad, India}
+{May 2018}
+{}
+{}
+
+%--------------------------------------------------
+% Projects
+%--------------------------------------------------
+\cvsection{Projects}
+
+\cventry
+{DesiRoomy {\footnotesize\textcolor{graytext}{\href{https://desiroomy.app}{(desiroomy.app)}}}}
+{}
+{}
+{}
+{
+\begin{cvitems}
+\item Built a full-stack roommate-matching platform using Supabase (PostgreSQL).
+\item Implemented OAuth 2.0 authentication, automated email workflows, and Supabase Edge Functions.
+\item Integrated PostHog analytics to guide product iteration.
+\end{cvitems}
+}
+
+\cventry
+{Barely Complicated}
+{}
+{}
+{}
+{
+\begin{cvitems}
+\item Built a FastAPI backend for QR code generation, containerized with Docker and deployed on AWS AppRunner.
+\item Developed a React.js frontend hosted on AWS Amplify.
+\end{cvitems}
+}
+
+\cventry
+{Find My Operator}
+{}
+{}
+{}
+{
+\begin{cvitems}
+\item Built a two-sided platform connecting business owners with operators.
+\item Implemented secure messaging, search, and filtering features.
+\begin{itemize}
+\item Programming & Scripting: Python
+\item JavaScript
+\item TypeScript
+\item Node.js
+\item .NET Core (familiarity)
+\item Databases: MySQL
+\item Microsoft SQL
+\item PostgreSQL (Supabase)
+\item NoSQL
+\item MongoDB
+\item Firebase RTDB
+\item Cloud & DevOps: AWS (S3, AppRunner, CloudWatch)
+\item Kubernetes (log analysis, pod-level debugging)
+\item Azure (exposure)
+\item Docker
+\item CI/CD (Jenkins, GitHub Actions)
+\item containerization
+\end{itemize}
+\end{cvitems}
+}
+
+%--------------------------------------------------
+% Certifications
+%--------------------------------------------------
+\cvsection{Certifications}
+
+\cvcompactentry{Artificial Intelligence Graduate Certificate — University of Missouri--St. Louis}
+\cvcompactentry{Machine Learning Certificate — eCornell, Cornell University (2024)}
+\cvcompactentry{MedCerts Cybersecurity Analyst (CySA+) — Vulnerability Management \& Threat Detection}
+
+
+
+
+
+%--------------------------------------------------
+% Achievements
+%--------------------------------------------------
+\cvsection{Achievements}
+
+\cvcompactentry{Judge — LA Hacks 2025, University of California, Los Angeles}
+\cvcompactentry{Judge — MHacks 2025, University of Michigan, Ann Arbor}
+
+
+
+\end{document}

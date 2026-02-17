@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+resources/resume_sections.tex
+resources/resume.pdf
+resources/*.aux
+resources/*.log
+resources/*.out
+resources/*.fls
+resources/*.fdb_latexmk

@@ -1,0 +1,68 @@
+summary: |
+  Software Engineer III with 7+ years of experience designing and operating cloud-native, distributed systems at scale. Currently leading backend and platform initiatives at Charter Communications, building resilient Spring Boot microservices deployed on AWS and Kubernetes with a strong focus on reliability, automation, and operational excellence. Experienced in reducing toil through CI/CD automation, infrastructure improvements, and observability enhancements while supporting production systems serving high-volume traffic.
+
+skills:
+  - category: "Languages"
+    items: "Java, Python, TypeScript, JavaScript, SQL"
+  - category: "Cloud & Infrastructure"
+    items: "AWS, Kubernetes, Docker, Azure (familiarity), Linux, Cloud-native architecture"
+  - category: "Platform & Distributed Systems"
+    items: "Microservices architecture, REST APIs, Event-driven systems, Kafka, High-availability design, Fault tolerance, Horizontal scaling"
+  - category: "DevOps & Automation"
+    items: "CI/CD, GitHub Actions, Jenkins, Git, Containerization, Infrastructure automation, Monitoring and logging"
+  - category: "Databases"
+    items: "PostgreSQL, MySQL, MongoDB, Redis (familiarity), Relational and NoSQL modeling"
+  - category: "Practices"
+    items: "Agile, Code reviews, Incident response, Production support, Documentation-first communication, On-call support"
+
+experience:
+  - position: "Software Engineer 3 — Java, Spring Boot, AWS, Kubernetes"
+    organization: "Charter Communications"
+    date: "Aug 2021 -- Present"
+    location: "Missouri, USA"
+    bullets:
+      - "Designed and operated cloud-native Spring Boot microservices deployed on AWS and Kubernetes, supporting high-volume production traffic with strong availability targets."
+      - "Implemented CI/CD pipelines using GitHub Actions and Jenkins to automate build, test, and deployment workflows, reducing release cycle time and operational toil."
+      - "Improved service reliability through proactive monitoring, structured logging, and performance tuning, reducing incident recurrence and improving MTTR."
+      - "Collaborated with cross-functional teams to migrate legacy services to modern microservices architecture, enhancing scalability and fault isolation."
+      - "Participated in production support and on-call rotations, performing root cause analysis and implementing long-term reliability fixes."
+      - "Led code reviews and mentored junior engineers on platform best practices, clean architecture, and secure coding standards."
+
+  - position: "Software Engineer — Java, Spring, Distributed Systems"
+    organization: "CribMD"
+    date: "Jan 2020 -- Jul 2021"
+    location: "Remote"
+    bullets:
+      - "Built and maintained backend services for a healthcare platform, designing secure REST APIs and scalable service integrations."
+      - "Optimized application performance and database queries to support growing user demand while maintaining reliability."
+      - "Implemented automated testing and CI workflows to improve deployment stability and code quality."
+      - "Collaborated in a distributed remote team environment, contributing to asynchronous design discussions and documentation."
+
+projects:
+  - position: "DesiRoomy {\footnotesize\textcolor{graytext}{\href{https://desiroomy.app}{(desiroomy.app)}}}"
+    raw_position: true
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Built a cloud-native platform using Next.js and Supabase (PostgreSQL) with secure authentication and API-driven workflows."
+      - "Designed scalable backend logic and automated deployment pipelines to support production workloads."
+      - "Implemented analytics and monitoring to track user behavior and system performance."
+
+  - position: "Business & Operators Platform"
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Developed a full-stack management platform using Next.js and REST APIs to support operational workflows."
+      - "Designed database schemas and backend services to ensure secure data handling and system scalability."
+      - "Automated CI/CD workflows to streamline releases and reduce manual deployment effort."
+
+  - position: "Barely Complicated Tools Suite"
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Built a suite of cloud-deployed web tools using React and FastAPI to automate everyday workflows."
+      - "Containerized services and implemented automated deployments to improve operational consistency."
+      - "Focused on reliability, maintainability, and low-toil architecture for sustainable platform growth."

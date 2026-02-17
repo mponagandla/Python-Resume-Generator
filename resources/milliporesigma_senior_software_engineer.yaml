@@ -1,0 +1,57 @@
+summary: |
+  Senior Software Engineer with 5+ years of experience designing, building, and operating cloud-native applications and microservices. Currently leading development of scalable Java Spring Boot services and React applications with CI/CD automation on AWS and Kubernetes. Strong background in DevOps, infrastructure automation, secure API design, database optimization, and production system reliability. Experienced in cloud platforms, containerization, and resilient system design supporting high-availability enterprise environments.
+
+skills:
+  - category: "Cloud & DevOps"
+    items: "AWS, Google Cloud Platform (GCP), Docker, Kubernetes, Jenkins, GitHub Actions, GitLab CI, CI/CD pipeline design, Infrastructure as Code, DevOps practices"
+  - category: "Backend & APIs"
+    items: "Java, Spring Boot, RESTful APIs, Microservices architecture, Node.js, Python, Secure API design"
+  - category: "Databases & Streaming"
+    items: "PostgreSQL, MongoDB, SQL, Relational data modeling, Cassandra (familiarity), Kafka, Event-driven systems"
+  - category: "Monitoring & Operations"
+    items: "Application monitoring, Log analysis, Production support, System reliability, Performance optimization, Telemetry systems"
+  - category: "Security & Infrastructure"
+    items: "OAuth 2.0, Role-based access control, Data privacy, Backup & disaster recovery concepts, Linux/Unix systems"
+  - category: "Frontend"
+    items: "React, Next.js, TypeScript, HTML5, CSS3"
+
+experience:
+  - position: "Software Engineer 3 — Java, Spring Boot, React, AWS, Kubernetes"
+    organization: "Charter Communications (Spectrum)"
+    date: "June 2022 -- Present"
+    location: "St. Louis, MO"
+    bullets:
+      - "Designed and maintained microservices using Java 17 and Spring Boot, improving scalability and reducing production defects."
+      - "Built and enhanced CI/CD pipelines using Jenkins and GitHub Actions to automate build, test, and deployment workflows."
+      - "Deployed containerized applications on Kubernetes, enabling rolling updates and improving system reliability."
+      - "Optimized PostgreSQL-backed services and improved query performance for high-volume production workloads."
+      - "Implemented secure authentication and authorization workflows aligned with enterprise security standards."
+      - "Collaborated in Agile teams to enhance monitoring, deployment automation, and service observability."
+
+projects:
+  - position: "DesiRoomy {\footnotesize\textcolor{graytext}{\href{https://desiroomy.app}{(desiroomy.app)}}}"
+    raw_position: true
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Built a cloud-native platform using Next.js and Supabase (PostgreSQL) with secure authentication and scalable backend services."
+      - "Implemented CI/CD workflows and automated deployments supporting rapid feature iteration."
+      - "Designed data models and optimized database queries for reliability and performance."
+
+  - position: "Business Operators Platform"
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Developed a Next.js and Node.js platform to manage vendor onboarding, analytics, and operational workflows."
+      - "Designed REST APIs and integrated PostgreSQL for transactional data storage and reporting."
+      - "Containerized services and deployed to cloud infrastructure with automated build pipelines."
+
+  - position: "Barely Complicated Tools Suite"
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Created cloud-based tools using React and FastAPI with secure API integrations."
+      - "Implemented CI/CD automation and monitoring practices to ensure stability and maintainability."

@@ -1,0 +1,56 @@
+summary: |
+  Senior Software Engineer with 5+ years of experience designing, building, and operating scalable cloud-native systems using Java, Spring Boot, TypeScript, and Python. Currently lead modernization of microservices and frontend platforms, embedding security, CI/CD, and resilience best practices while mentoring engineers and collaborating across global teams. Strong background in AWS, Kubernetes, RESTful APIs, and DevOps, with proven ability to improve system stability, performance, and maintainability in production environments.
+
+skills:
+  - category: "Languages"
+    items: "Java, TypeScript, JavaScript, Python, C, C++"
+  - category: "Frameworks & Architecture"
+    items: "Spring Boot, React, Next.js, Node.js, FastAPI, Microservices, RESTful API Design"
+  - category: "Cloud & DevOps"
+    items: "AWS (S3, AppRunner, CloudWatch), Docker, Kubernetes, Jenkins, GitHub Actions, CI/CD"
+  - category: "Databases"
+    items: "PostgreSQL, MySQL, MongoDB, SQL Server, Relational & NoSQL Data Modeling"
+  - category: "Testing & Quality"
+    items: "JUnit 5, Mockito, Mocha, Jest, Automated Testing, TDD"
+  - category: "Practices"
+    items: "Agile/Scrum, Secure SDLC, Code Reviews, System Design, Mentoring, Information Security"
+
+experience:
+  - position: "Software Engineer 3 — Java, Spring Boot, React, AWS"
+    organization: "Charter Communications / Spectrum"
+    date: "Jul 2021 -- Present"
+    location: ""
+    bullets:
+      - "Led migration of legacy Java 8/Jersey microservices to Java 17 and Spring Boot 3.x, improving security posture and reducing operational defects."
+      - "Designed and implemented scalable RESTful APIs and event-driven services, supporting high-throughput production workloads."
+      - "Improved system robustness by enhancing error handling, logging, and monitoring using AWS CloudWatch and Kubernetes diagnostics."
+      - "Collaborated with product and architecture teams to review user stories, define implementation approaches, and coordinate integration builds."
+      - "Embedded CI/CD best practices using GitHub Actions and Jenkins, increasing deployment reliability and release velocity."
+      - "Mentored junior engineers through code reviews, design discussions, and Agile ceremonies, strengthening team-wide engineering standards."
+
+projects:
+  - position: "DesiRoomy {\\footnotesize\\textcolor{graytext}{\\href{https://desiroomy.app}{(desiroomy.app)}}}"
+    raw_position: true
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Built a full-stack platform using Next.js and Supabase (PostgreSQL), implementing secure REST APIs and real-time data workflows."
+      - "Integrated OAuth 2.0 authentication and automated CI/CD pipelines for reliable deployments and secure user management."
+      - "Designed scalable data models and analytics tracking to support user growth and operational insights."
+
+  - position: "Barely Complicated"
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Developed a FastAPI-based backend and React frontend, deploying containerized services on AWS AppRunner."
+      - "Implemented secure API endpoints and database schemas for QR generation and analytics features."
+
+  - position: "SpontaneousMeet"
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Engineered a SwiftUI and Supabase-powered mobile platform with secure authentication and real-time data synchronization."
+      - "Designed backend services with row-level security and optimized PostgreSQL queries for performance and stability."

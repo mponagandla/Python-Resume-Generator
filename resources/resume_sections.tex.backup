@@ -1,0 +1,88 @@
+%--------------------------------------------------
+% Summary
+%--------------------------------------------------
+\cvsection{Summary}
+
+\begin{cvparagraph}
+Software Engineer 3 with 5+ years of experience designing and operating cloud-native microservices and distributed systems using Java, Spring Boot, and AWS. Currently modernizing large-scale production services at Charter Communications, leading API design, performance optimization, and reliability improvements across enterprise platforms. Proven ability to build scalable backend architectures, mentor engineers, and drive end-to-end delivery in Agile environments.
+\end{cvparagraph}
+
+%--------------------------------------------------
+% Skills (condensed, Awesome-CV style)
+%--------------------------------------------------
+\cvsection{Skills}
+
+\begin{cvskills}
+\cvskill{Languages}{Java, TypeScript, JavaScript, Python, SQL}
+\cvskill{Backend \& Architecture}{Spring Boot, RESTful APIs, Microservices, Distributed Systems, Event-Driven Architecture, GraphQL}
+\cvskill{Cloud \& DevOps}{AWS (S3, AppRunner, CloudWatch), Kubernetes, Docker, Jenkins, GitHub Actions, CI/CD, Infrastructure Automation}
+\cvskill{Databases}{PostgreSQL, MySQL, MongoDB, Firebase RTDB, Relational \& NoSQL Data Modeling}
+\cvskill{Messaging \& Integration}{Apache Kafka, Asynchronous Processing, Service-to-Service Communication}
+\cvskill{Testing \& Quality}{JUnit 5, Mockito, Mocha, Jest, Automated Testing, Code Reviews}
+\cvskill{Tools}{Git, IntelliJ IDEA, VS Code, }
+\end{cvskills}
+
+%--------------------------------------------------
+% Experience
+%--------------------------------------------------
+\cvsection{Experience}
+
+\cventry
+{Software Engineer 3 — Java, Spring Boot, AWS}
+{Charter Communications (Spectrum)}
+{July 2021 -- Present}
+{St. Louis, MO}
+{
+\begin{cvitems}
+\item Designed and maintained high-availability microservices using Java 17 and Spring Boot 3.x supporting large-scale production workflows.
+\item Modernized legacy Java 8/Jersey systems to Spring Boot, improving reliability, maintainability, and deployment consistency.
+\item Built and optimized RESTful and GraphQL APIs enabling seamless integration across distributed enterprise services.
+\item Implemented event-driven workflows using Apache Kafka to enhance system resilience and asynchronous processing.
+\item Led root-cause analysis and production debugging efforts in Kubernetes environments, reducing incident resolution time.
+\item Mentored junior engineers through code reviews and design discussions, promoting clean architecture and best practices.
+\item Collaborated with cross-functional teams to define requirements, plan releases, and ensure alignment with enterprise architecture standards.
+\end{cvitems}
+}
+
+%--------------------------------------------------
+% Projects
+%--------------------------------------------------
+\cvsection{Projects}
+
+\cventry
+{DesiRoomy}
+{}
+{}
+{}
+{
+\begin{cvitems}
+\item Built a full-stack roommate-matching platform using Next.js and Supabase (PostgreSQL), designing scalable API-driven backend services.
+\item Implemented secure authentication, real-time data workflows, and automated CI/CD pipelines to support reliable cloud deployments.
+\item Designed database schemas and service layers optimized for performance and data integrity.
+\end{cvitems}
+}
+
+\cventry
+{Business \& Operators Platform}
+{}
+{}
+{}
+{
+\begin{cvitems}
+\item Developed a two-sided platform using Next.js and backend APIs to connect business owners with operators.
+\item Architected REST services and data models enabling secure messaging, search, and role-based workflows.
+\item Designed modular service components to support future scalability and feature expansion.
+\end{cvitems}
+}
+
+\cventry
+{Barely Complicated Tools Suite}
+{}
+{}
+{}
+{
+\begin{cvitems}
+\item Created cloud-hosted tools using FastAPI and React, containerized with Docker and deployed on AWS AppRunner.
+\item Built REST APIs and automation scripts to streamline everyday workflows with scalable backend services.
+\end{cvitems}
+}
