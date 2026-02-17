@@ -1,87 +1,113 @@
 # Python Resume Generator
 
-Generate PDF resumes from YAML content using LaTeX (Awesome-CV). A **content → render → compile** pipeline: you edit structured YAML, a Python script renders it to LaTeX, and XeLaTeX produces the PDF.
+A YAML-driven resume generator CLI that compiles LaTeX (Awesome-CV) to PDF. Edit structured YAML content, run the tool, and get a professionally formatted resume.
 
 ---
 
-## Architecture
+## What It Does
 
-### Overview
+The tool reads resume content from YAML (summary, skills, experience, projects), renders it to LaTeX with proper escaping, and compiles it to PDF using the [Awesome-CV](https://github.com/posquit0/Awesome-CV) document class. The pipeline is: **YAML → LaTeX → PDF**.
 
-Content lives in YAML. A Python script converts it to LaTeX, which is compiled to PDF using XeLaTeX and the Awesome-CV document class.
+---
 
-### Project Structure
+## Key Features
+
+- **YAML-based content** — Edit resume content in YAML instead of LaTeX
+- **LaTeX escaping** — Automatically escapes special characters (`\`, `&`, `%`, `#`, etc.)
+- **Awesome-CV layout** — Professional, ATS-friendly resume format
+- **Job-specific variants** — Maintain multiple YAML versions for different roles
+- **Simple build** — One command to generate and compile
+
+---
+
+## Installation
+
+**Prerequisites**
+
+- Python 3.10+
+- [Pipenv](https://pipenv.pypa.io/) (or `pip`)
+- A LaTeX distribution with XeLaTeX ([TeX Live](https://www.tug.org/texlive/), [MiKTeX](https://miktex.org/), or [MacTeX](https://www.tug.org/mactex/))
+
+**Steps**
+
+```bash
+git clone <repository-url>
+cd python-resume-generator
+pipenv install
+```
+
+---
+
+## Quick Start
+
+1. Edit `resources/resume_content.yaml` with your summary, skills, experience, and projects.
+2. Run:
+
+```bash
+make build
+```
+
+3. Open `resources/resume.pdf`.
+
+---
+
+## CLI Usage
+
+**Full build** (generate LaTeX + compile to PDF):
+
+```bash
+make build
+```
+
+**Generate LaTeX only** (writes `resources/resume_sections.tex`):
+
+```bash
+make generate
+```
+
+Or directly:
+
+```bash
+pipenv run python generate_resume.py
+```
+
+**Clean build artifacts**:
+
+```bash
+make clean
+```
+
+**Using a job-specific YAML** — Copy the desired variant to the default content path, then build:
+
+```bash
+cp resources/job-descriptions/github_software_engineer_iii.yaml resources/resume_content.yaml
+make build
+```
+
+---
+
+## Project Structure
 
 ```
-Python Resume Generator/
-├── generate_resume.py          # Main generator script
-├── Makefile                    # Build orchestration
-├── Pipfile / Pipfile.lock      # Python dependencies
-├── .env.example                # Optional env config (LLM/job-tailoring)
+├── generate_resume.py          # CLI entry point
+├── Makefile                    # Build targets
+├── Pipfile                     # Python dependencies
 └── resources/
-    ├── resume.tex              # LaTeX document (layout, header, Education, Certifications, etc.)
-    ├── resume_content.yaml     # Source content (Summary, Skills, Experience, Projects)
-    ├── resume_sections.tex     # Generated LaTeX (replaced on each run)
-    ├── job-descriptions/       # Job-specific YAML variants
-    │   ├── github_compute_foundation_software_engineer_iii.yaml
-    │   ├── github_software_engineer_iii.yaml
-    │   └── ...
-    └── awesome-cv.cls          # LaTeX class
+    ├── resume.tex              # LaTeX document (layout, static sections)
+    ├── resume_content.yaml     # Primary content source
+    ├── resume_sections.tex     # Generated (gitignored)
+    ├── job-descriptions/       # Job-tailored YAML variants
+    └── awesome-cv.cls          # Awesome-CV document class
 ```
 
-### Data Flow
+---
 
-1. **Input**: `resume_content.yaml` (or a job-specific YAML in `job-descriptions/`)
-2. **Generation**: `generate_resume.py` parses the YAML, escapes LaTeX characters, and writes `resume_sections.tex`
-3. **Compilation**: `xelatex` compiles `resume.tex` (which includes `resume_sections.tex`) to PDF
+## Contributing
 
-### Components
+Contributions are welcome. Please open an issue or pull request on the project repository.
 
-#### 1. Content Layer (`resume_content.yaml`)
+---
 
-YAML with four main sections:
+## License
 
-- **summary** — Plain paragraph
-- **skills** — List of `{category, items}` entries
-- **experience** — List of `{position, organization, date, location, bullets}`
-- **projects** — Same structure as experience (optional `raw_position: true` for LaTeX in title)
-
-#### 2. Generator (`generate_resume.py`)
-
-- Reads YAML
-- Escapes LaTeX special characters (`\`, `&`, `%`, `#`, `_`, `{`, `}`, `$`, `~`, `^`)
-- Renders Summary, Skills, Experience, Projects into Awesome-CV LaTeX (`\cvsection`, `\cventry`, `\cvskill`, etc.)
-- Writes `resume_sections.tex`
-
-#### 3. LaTeX Layer (`resume.tex`)
-
-- Uses `awesome-cv` document class
-- Page geometry, fonts, colors
-- Fixed personal info (name, contact)
-- Includes generated content via `\input{resume_sections}`
-- Static sections: Education, Certifications, Achievements
-
-#### 4. Build System (`Makefile`)
-
-| Target    | Action                                               |
-|----------|------------------------------------------------------|
-| `generate` | Runs the Python generator                            |
-| `build`    | Runs `generate` then compiles with `xelatex`         |
-| `clean`    | Removes generated PDF and auxiliary build artifacts  |
-
-### Job-Specific Variants
-
-`resources/job-descriptions/` contains YAML variants tailored to different roles. Each follows the same schema as `resume_content.yaml`. To target a job, copy the desired file to `resume_content.yaml`, or modify `generate_resume.py` to accept a content file path. The `.env.example` references optional LLM-based tailoring (Ollama/OpenAI), which is not yet implemented.
-
-### Dependencies
-
-| Type   | Tool / Package | Purpose                  |
-|--------|----------------|--------------------------|
-| Python | PyYAML ≥ 6.0   | Parsing YAML content     |
-| LaTeX  | XeLaTeX        | PDF compilation          |
-| LaTeX  | awesome-cv     | Resume layout & macros   |
-
-### Output
-
-- **`resources/resume_sections.tex`** — Generated LaTeX (gitignored)
-- **`resources/resume.pdf`** — Final PDF (gitignored)
+[License TBD]
