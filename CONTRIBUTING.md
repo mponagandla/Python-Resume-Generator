@@ -2,6 +2,8 @@
 
 Thank you for your interest in contributing. This guide explains how to set up the project and contribute effectively.
 
+**License:** By submitting contributions, you agree that your contributions will be licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html), consistent with the project license.
+
 ---
 
 ## Fork and Clone

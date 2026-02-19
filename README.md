@@ -1,5 +1,7 @@
 # Python Resume Generator
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 A YAML-driven resume generator CLI that compiles LaTeX (Awesome-CV) to PDF. Edit structured YAML content, run the tool, and get a professionally formatted resume.
 
 ---
@@ -110,4 +112,4 @@ Contributions are welcome. Please open an issue or pull request on the project r
 
 ## License
 
-[License TBD]
+This project is licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html). See [LICENSE](LICENSE) for the full text.
