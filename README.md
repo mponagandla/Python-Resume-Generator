@@ -49,7 +49,7 @@ pipenv install
 make build
 ```
 
-3. Open `resources/resume.pdf`.
+3. Open the newest `output/resume-YYYYMMDD-HHMMSS.pdf`.
 
 ---
 
