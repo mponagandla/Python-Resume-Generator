@@ -8,7 +8,7 @@ A YAML-driven resume generator CLI that compiles LaTeX (Awesome-CV) to PDF. Edit
 
 ## What It Does
 
-The tool reads resume content from YAML (summary, skills, experience, projects), renders it to LaTeX with proper escaping, and compiles it to PDF using the [Awesome-CV](https://github.com/posquit0/Awesome-CV) document class. The pipeline is: **YAML → LaTeX → PDF**.
+The tool reads resume content from YAML (summary, skills, experience, projects), renders it to LaTeX with proper escaping, and compiles it to PDF using the [Awesome-CV](https://github.com/posquit0/Awesome-CV) document class. The pipeline is: **YAML → LaTeX → PDF**. Optionally, use **AI tailoring** to adapt your content to a job description; the LLM only rephrases and emphasizes your existing experience—it does not add new roles, skills, or achievements.
 
 ---
 
@@ -18,6 +18,7 @@ The tool reads resume content from YAML (summary, skills, experience, projects),
 - **LaTeX escaping** — Automatically escapes special characters (`\`, `&`, `%`, `#`, etc.)
 - **Awesome-CV layout** — Professional, ATS-friendly resume format
 - **Job-specific variants** — Maintain multiple YAML versions for different roles
+- **AI tailoring (optional)** — Generate a resume tailored to a job description from your existing content; the LLM only rephrases and emphasizes, it does not add new experience or skills
 - **Simple build** — One command to generate and compile
 
 ---
@@ -42,14 +43,14 @@ pipenv install
 
 ## Quick Start
 
-1. Edit `resources/resume_content.yaml` with your summary, skills, experience, and projects.
+1. Create `my-content/` and add your resume content there (see `resources/example_resume_content.yaml` for the schema). Default content path is `my-content/resume_content.yaml` (this folder is gitignored so your content stays local).
 2. Run:
 
 ```bash
 make build
 ```
 
-3. Open `resources/resume.pdf`.
+3. Open the newest `output/resume-YYYYMMDD-HHMMSS.pdf`.
 
 ---
 
@@ -79,12 +80,26 @@ pipenv run python generate_resume.py
 make clean
 ```
 
-**Using a job-specific YAML** — Copy the desired variant to the default content path, then build:
+**Using a job-specific YAML** — Copy a variant to your content path, then build:
 
 ```bash
-cp resources/job-descriptions/github_software_engineer_iii.yaml resources/resume_content.yaml
+cp resources/job-descriptions/github_software_engineer_iii.yaml my-content/resume_content.yaml
 make build
 ```
+
+**AI tailoring** — Tailor your resume to a job description using a local LLM (Ollama) or OpenAI. Requires [Ollama](https://ollama.ai/) running locally (e.g. `ollama serve` and `ollama pull llama3.2`) or set `OPENAI_API_KEY` and use `--openai`:
+
+```bash
+# Tailor to a job description file, then build PDF
+make build-tailored JOB_DESC=my-content/job-descriptions/jd.txt
+
+# Or run the generator with options
+pipenv run python generate_resume.py --tailor my-content/job-descriptions/jd.txt
+pipenv run python generate_resume.py --tailor-url "https://example.com/job-posting"
+pipenv run python generate_resume.py --tailor jd.txt --openai   # use OpenAI instead of Ollama
+```
+
+**CLI options** — `-i/--input` (content YAML path; default `my-content/resume_content.yaml`), `-o/--output` (output LaTeX path), `--tailor <path>`, `--tailor-url <url>`, `--no-tailor`, `--openai`, `--version`, `-v/--verbose`. See `pipenv run python generate_resume.py --help`.
 
 ---
 
@@ -92,13 +107,17 @@ make build
 
 ```
 ├── generate_resume.py          # CLI entry point
+├── tailor.py                   # AI tailoring (Ollama / OpenAI)
 ├── Makefile                    # Build targets
 ├── Pipfile                     # Python dependencies
+├── my-content/                 # Your resume & job JDs (gitignored)
+│   ├── resume_content.yaml     # Primary content source (default -i)
+│   └── job-descriptions/       # Private job description files
 └── resources/
     ├── resume.tex              # LaTeX document (layout, static sections)
-    ├── resume_content.yaml     # Primary content source
+    ├── example_resume_content.yaml  # Schema example
     ├── resume_sections.tex     # Generated (gitignored)
-    ├── job-descriptions/       # Job-tailored YAML variants
+    ├── job-descriptions/       # Example job-tailored YAML variants
     └── awesome-cv.cls          # Awesome-CV document class
 ```
 

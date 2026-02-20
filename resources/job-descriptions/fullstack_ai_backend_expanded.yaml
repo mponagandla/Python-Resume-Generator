@@ -1,0 +1,60 @@
+summary: |
+  Senior Full Stack Software Engineer with 5+ years of experience building scalable backend-heavy systems using Java and Python, complemented by React-based frontend development. Experienced in designing AI-adjacent tooling, modernizing legacy architectures, and developing robust RESTful services that improve automation and reduce manual operational workload. Strong engineering fundamentals with a focus on clean architecture, performance, and maintainability.
+
+skills:
+  - category: "Languages"
+    items: "Java, Python, JavaScript, TypeScript"
+  - category: "Backend & APIs"
+    items: "Spring Boot, REST APIs, Microservices Architecture, Asynchronous Processing, API Integration"
+  - category: "Frontend"
+    items: "React, Next.js, HTML5, CSS3"
+  - category: "Databases"
+    items: "PostgreSQL, MySQL, MongoDB, Firebase RTDB"
+  - category: "Cloud & DevOps"
+    items: "AWS (S3, AppRunner, CloudWatch), Docker, GitHub Actions, Jenkins, CI/CD"
+  - category: "Testing"
+    items: "JUnit 5, Mockito, Mocha, Chai"
+  - category: "Engineering Practices"
+    items: "Agile/Scrum, Code Reviews, System Design, Object-Oriented Design, Secure Coding"
+
+experience:
+  - position: "Software Engineer 3 — Java, Spring Boot, Python, React"
+    organization: "Charter Communications / Spectrum"
+    date: "Jul 2021 -- Present"
+    location: ""
+    bullets:
+      - "Designed and maintained backend-heavy microservices in Java (Spring Boot) supporting large-scale internal systems with high reliability requirements."
+      - "Developed RESTful APIs and integration layers enabling seamless communication between frontend applications and distributed backend services."
+      - "Built and optimized concurrent processing workflows using Java Streams and multithreading to improve system throughput and responsiveness."
+      - "Collaborated with stakeholders to translate architectural requirements into scalable backend implementations aligned with long-term platform strategy."
+      - "Modernized legacy Java 8/Jersey systems to Java 17/Spring Boot 3.x, improving maintainability, security posture, and deployment consistency."
+      - "Designed and optimized backend services in Java and Python to support AI-driven workflows, improving response accuracy and reducing latency for high-volume internal users."
+      - "Refactored legacy service layers into modular, testable components, improving maintainability and enabling faster iteration on new architecture-related features."
+      - "Implemented RESTful APIs and asynchronous processing patterns to support intelligent decision-support features and complex data transformations."
+      - "Collaborated closely with architecture stakeholders to translate domain-specific design requirements into scalable backend solutions, reducing manual architecture review effort and improving system consistency."
+
+projects:
+  - position: "DesiRoomy {\\footnotesize\\textcolor{graytext}{\\href{https://desiroomy.app}{(desiroomy.app)}}}"
+    raw_position: true
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Built a full-stack platform using Next.js (frontend) and Supabase/PostgreSQL (backend) with API-driven workflows and secure authentication."
+      - "Implemented backend automation using server-side functions and designed scalable database schemas for structured data collection."
+
+  - position: "Business Operators Platform"
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Developed a full-stack web application using Next.js with a Supabase backend, designing REST-style APIs and structured data models."
+      - "Implemented secure messaging, search, and filtering logic with optimized backend queries to support real-time interactions."
+
+  - position: "Barely Complicated Tools Suite"
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "Built modular backend services using FastAPI and containerized deployments with Docker for reusable productivity tools."
+      - "Designed React-based frontend interfaces integrating securely with backend APIs to support scalable feature expansion."

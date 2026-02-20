@@ -4,6 +4,7 @@ Generate resume_sections.tex from resume_content.yaml.
 
 Reads Summary, Skills, Experience, and Projects from the YAML content file,
 escapes LaTeX special characters, and renders the four sections in Awesome-CV format.
+Supports optional AI tailoring (--tailor) to adapt content to a job description.
 
 Copyright (C) 2025  Manoj Ponagandla
 
@@ -21,6 +22,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+import argparse
+import logging
 import sys
 from pathlib import Path
 
@@ -30,9 +33,11 @@ except ImportError:
     print("Error: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
+__version__ = "1.0.0"
 
-RESOURCES_DIR = Path(__file__).resolve().parent / "resources"
-CONTENT_FILE = RESOURCES_DIR / "resume_content.yaml"
+PROJECT_ROOT = Path(__file__).resolve().parent
+RESOURCES_DIR = PROJECT_ROOT / "resources"
+CONTENT_FILE = PROJECT_ROOT / "my-content" / "resume_content.yaml"
 OUTPUT_FILE = RESOURCES_DIR / "resume_sections.tex"
 
 
@@ -165,14 +170,87 @@ def render_projects(projects: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Generate resume_sections.tex from resume content YAML. Optionally tailor content to a job description using an LLM."
+    )
+    parser.add_argument(
+        "-i", "--input",
+        type=Path,
+        default=CONTENT_FILE,
+        help="Path to content YAML (default: my-content/resume_content.yaml)",
+    )
+    parser.add_argument(
+        "-o", "--output",
+        type=Path,
+        default=OUTPUT_FILE,
+        help="Path for generated LaTeX sections (default: resources/resume_sections.tex)",
+    )
+    parser.add_argument(
+        "--tailor",
+        metavar="PATH",
+        help="Path to job description file (text or YAML with 'description' key). Tailors content via LLM.",
+    )
+    parser.add_argument(
+        "--tailor-url",
+        metavar="URL",
+        help="URL of job description to fetch and tailor content to.",
+    )
+    parser.add_argument(
+        "--no-tailor",
+        action="store_true",
+        help="Disable LLM tailoring even if --tailor/--tailor-url would be inferred.",
+    )
+    parser.add_argument(
+        "--openai",
+        action="store_true",
+        help="Use OpenAI API for tailoring (default: Ollama). Requires OPENAI_API_KEY.",
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+    )
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Enable verbose (debug) output.",
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
-    content_path = CONTENT_FILE
+    args = parse_args()
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG)
+
+    content_path = args.input.resolve()
     if not content_path.exists():
         print(f"Error: Content file not found: {content_path}", file=sys.stderr)
         sys.exit(1)
 
-    with open(content_path, encoding="utf-8") as f:
-        data = yaml.safe_load(f)
+    tailor_source = None
+    if not args.no_tailor and (args.tailor or args.tailor_url):
+        tailor_source = args.tailor or args.tailor_url
+        if args.tailor:
+            jd_path = Path(args.tailor).resolve()
+            if not jd_path.exists():
+                print(f"Error: Job description file not found: {jd_path}", file=sys.stderr)
+                sys.exit(1)
+            tailor_source = str(jd_path)
+
+    if tailor_source:
+        import tailor as tailor_mod
+        yaml_str = tailor_mod.tailor(
+            content_path,
+            tailor_source,
+            use_openai=args.openai,
+            verbose=args.verbose,
+        )
+        data = yaml.safe_load(yaml_str)
+    else:
+        with open(content_path, encoding="utf-8") as f:
+            data = yaml.safe_load(f)
 
     if not data:
         print("Error: Content file is empty.", file=sys.stderr)
@@ -189,11 +267,12 @@ def main() -> None:
         sections.append(render_projects(data["projects"]))
 
     output = "\n".join(sections)
-
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+    out_path = args.output.resolve()
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f:
         f.write(output)
 
-    print(f"Generated {OUTPUT_FILE}")
+    print(f"Generated {out_path}")
 
 
 if __name__ == "__main__":
