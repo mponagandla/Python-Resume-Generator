@@ -74,7 +74,10 @@
 \RequirePackage{unicode-math}
 % Needed to use icons from font-awesome
 % (https://github.com/posquit0/latex-fontawesome)
+% XeLaTeX often cannot find FontAwesome by name; set Path when fonts/FontAwesome.otf exists (e.g. resources/fonts/)
+\IfFileExists{fonts/FontAwesome.otf}{\defaultfontfeatures{Path=fonts/}}{}
 \RequirePackage{fontawesome}
+\defaultfontfeatures{}% reset so other fonts are not restricted to fonts/
 \RequirePackage[default,opentype]{sourcesanspro}
 % Needed for the photo ID
 \RequirePackage[skins]{tcolorbox}
@@ -458,9 +461,9 @@
   \begin{minipage}[c]{\headertextwidth}
     \ifthenelse{\equal{#1}{L}}{\raggedright}{\ifthenelse{\equal{#1}{R}}{\raggedleft}{\centering}}
     \headerfirstnamestyle{\@firstname}\headerlastnamestyle{{}\acvHeaderNameDelim\@lastname}%
-    \\[\acvHeaderAfterNameSkip]%
-    \ifthenelse{\isundefined{\@position}}{}{\headerpositionstyle{\@position\\[\acvHeaderAfterPositionSkip]}}%
-    \ifthenelse{\isundefined{\@address}}{}{\headeraddressstyle{\@address\\[\acvHeaderAfterAddressSkip]}}%
+    \par\vspace{\acvHeaderAfterNameSkip}%
+    \ifthenelse{\isundefined{\@position}}{}{\headerpositionstyle{\@position}\par\vspace{\acvHeaderAfterPositionSkip}}%
+    \ifthenelse{\isundefined{\@address}}{}{\headeraddressstyle{\@address}\par\vspace{\acvHeaderAfterAddressSkip}}%
     \headersocialstyle{%
       \newbool{isstart}%
       \setbool{isstart}{true}%
@@ -548,10 +551,10 @@
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
           \@extrainfo%
         }%
-    } \\[\acvHeaderAfterSocialSkip]%
+    }\par\vspace{\acvHeaderAfterSocialSkip}%
     \ifthenelse{\isundefined{\@quote}}%
       {}%
-      {\headerquotestyle{\@quote\\}\vspace{\acvHeaderAfterQuoteSkip}}%
+      {\headerquotestyle{\@quote}\par\vspace{\acvHeaderAfterQuoteSkip}}%
   \end{minipage}%
   \begin{minipage}[c]{\headerphotowidth}%
     \ifthenelse{\equal{\@photoalign}{right}}{\raggedleft\drawphoto}{}
@@ -662,13 +665,14 @@
 }
 
 % Define an environment for cvskill
+% Category column uses R{width} so lengthy names wrap instead of overflowing; skills column uses L for wrap.
 \newenvironment{cvskills}{%
   \vspace{\acvSectionContentTopSkip}
   \vspace{-2.0mm}
   \begin{center}
     \setlength\tabcolsep{1ex}
     \setlength{\extrarowheight}{0pt}
-    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} r L{\textwidth * \real{0.9}}}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} R{0.26\textwidth} L{0.70\textwidth}}
 }{%
     \end{tabular*}
   \end{center}

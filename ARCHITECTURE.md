@@ -1,6 +1,6 @@
 # Architecture: YAML → Python → LaTeX → PDF Pipeline
 
-This document explains the internal architecture of the resume generator for contributors. The pipeline has four main layers plus a future extension point for AI tailoring.
+This document explains the internal architecture of the resume generator for contributors. The pipeline has four main layers plus an optional AI tailoring step before the content layer.
 
 ---
 
@@ -77,28 +77,15 @@ The build layer is orchestrated by the **Makefile**:
 
 ---
 
-## Future AI Tailoring Extension Point
+## AI Tailoring (Optional)
 
-The `.env.example` and `job-descriptions/` structure hint at a future AI tailoring feature. The intended design:
+The `tailor.py` module implements AI tailoring. The single source of truth for facts is the user's content (`resume_content.yaml`); the LLM only rephrases and emphasizes to match a job description—it does not add new experience, skills, or achievements.
 
-1. **Inputs** — Base content (`resume_content.yaml`) plus a job description (URL, text, or file).
-2. **Extension point** — A call before (or instead of) direct YAML loading:
-   ```python
-   # Pseudocode
-   if ENABLE_AI_TAILORING and job_description_path:
-       tailored_content = call_llm(base_content, job_description)
-       data = yaml.safe_load(tailored_content)  # or structured output
-   else:
-       data = yaml.safe_load(content_path)
-   ```
-3. **LLM role** — Tailor bullets, emphasize relevant skills, adjust summary wording; output remains valid YAML conforming to the existing schema.
-4. **Integration** — Ollama (local) or OpenAI (API); config from env vars like `RESUME_LLM_MODEL`, `OLLAMA_HOST`, `OPENAI_API_KEY`.
-5. **Separation** — AI logic lives in a separate module (e.g. `tailor.py`) that `main()` optionally invokes; the rest of the pipeline stays unchanged.
-
-Extension points to preserve:
-
-- **Before loading** — AI produces tailored YAML (file or string); the existing loader and renderers stay as-is.
-- **CLI flag** — e.g. `--tailor <job_desc>`, `--no-tailor`; default behavior remains non-AI for backward compatibility.
-- **Fallback** — If AI fails, fall back to base content and log a warning.
+1. **Inputs** — Base content (`resume_content.yaml`) plus an optional job description (file path or URL).
+2. **Integration** — When `--tailor` or `--tailor-url` is passed, `generate_resume.py` calls `tailor.tailor()` before loading content. The tailor returns a YAML string that is then loaded and rendered as usual.
+3. **LLM role** — Tailor bullets, emphasize relevant skills, adjust summary wording; output remains valid YAML conforming to the existing schema. The system prompt explicitly forbids inventing job titles, companies, dates, technologies, or achievements.
+4. **Backends** — Ollama (local, default) via HTTP API; optional OpenAI when `--openai` is used and `OPENAI_API_KEY` is set. Config: `RESUME_LLM_MODEL`, `OLLAMA_HOST`, `OPENAI_API_KEY` (see `.env.example`).
+5. **Validation** — `validate_no_new_facts(base_data, tailored_data)` checks that the tailored output does not introduce new organizations, positions, or projects; if it does, the base content is used and a warning is logged.
+6. **Fallback** — On LLM failure, parse error, or validation failure, the pipeline uses the original base content and logs a warning.
 
 The pipeline remains: **Content (YAML or AI-tailored) → Render → Template → Build**, with AI as an optional preprocessing step before the content layer.

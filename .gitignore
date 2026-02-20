@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 resources/resume_sections.tex
 resources/resume.pdf
+output/
 resources/*.aux
 resources/*.log
 resources/*.out

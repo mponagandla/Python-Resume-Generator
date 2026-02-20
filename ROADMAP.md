@@ -44,14 +44,14 @@ This roadmap outlines planned improvements for the Python Resume Generator. Item
 
 ## Phase 3: AI & Distribution
 
-### AI Tailoring
+### AI Tailoring (done)
 
-- Implement `tailor.py` (or equivalent) as described in [ARCHITECTURE.md](ARCHITECTURE.md)
-- Support Ollama (local) as default; optional OpenAI backend
-- CLI: `--tailor <job_desc_file>` or `--tailor-url <url>`
+- Implemented `tailor.py` as described in [ARCHITECTURE.md](ARCHITECTURE.md)
+- Ollama (local) as default; optional OpenAI backend via `--openai`
+- CLI: `--tailor <job_desc_file>`, `--tailor-url <url>`, `--no-tailor`, `-i`/`-o`, `--version`, `--verbose`
 - Env config: `RESUME_LLM_MODEL`, `OLLAMA_HOST`, `OPENAI_API_KEY`
-- Fallback to base content on LLM failure
-- Document prompting strategy and rate limits
+- Fallback to base content on LLM failure; `validate_no_new_facts()` guards against fabrication
+- Future: optional "generate from raw profile" (single verbose profile YAML → polished resume YAML) as Phase 4 enhancement
 
 ### Docker Support
 

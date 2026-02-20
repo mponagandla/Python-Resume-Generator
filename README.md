@@ -8,7 +8,7 @@ A YAML-driven resume generator CLI that compiles LaTeX (Awesome-CV) to PDF. Edit
 
 ## What It Does
 
-The tool reads resume content from YAML (summary, skills, experience, projects), renders it to LaTeX with proper escaping, and compiles it to PDF using the [Awesome-CV](https://github.com/posquit0/Awesome-CV) document class. The pipeline is: **YAML → LaTeX → PDF**.
+The tool reads resume content from YAML (summary, skills, experience, projects), renders it to LaTeX with proper escaping, and compiles it to PDF using the [Awesome-CV](https://github.com/posquit0/Awesome-CV) document class. The pipeline is: **YAML → LaTeX → PDF**. Optionally, use **AI tailoring** to adapt your content to a job description; the LLM only rephrases and emphasizes your existing experience—it does not add new roles, skills, or achievements.
 
 ---
 
@@ -18,6 +18,7 @@ The tool reads resume content from YAML (summary, skills, experience, projects),
 - **LaTeX escaping** — Automatically escapes special characters (`\`, `&`, `%`, `#`, etc.)
 - **Awesome-CV layout** — Professional, ATS-friendly resume format
 - **Job-specific variants** — Maintain multiple YAML versions for different roles
+- **AI tailoring (optional)** — Generate a resume tailored to a job description from your existing content; the LLM only rephrases and emphasizes, it does not add new experience or skills
 - **Simple build** — One command to generate and compile
 
 ---
@@ -86,12 +87,27 @@ cp resources/job-descriptions/github_software_engineer_iii.yaml resources/resume
 make build
 ```
 
+**AI tailoring** — Tailor your resume to a job description using a local LLM (Ollama) or OpenAI. Requires [Ollama](https://ollama.ai/) running locally (e.g. `ollama serve` and `ollama pull llama3.2`) or set `OPENAI_API_KEY` and use `--openai`:
+
+```bash
+# Tailor to a job description file, then build PDF
+make build-tailored JOB_DESC=path/to/job-description.txt
+
+# Or run the generator with options
+pipenv run python generate_resume.py --tailor path/to/jd.txt
+pipenv run python generate_resume.py --tailor-url "https://example.com/job-posting"
+pipenv run python generate_resume.py --tailor jd.txt --openai   # use OpenAI instead of Ollama
+```
+
+**CLI options** — `-i/--input` (content YAML path), `-o/--output` (output LaTeX path), `--tailor <path>`, `--tailor-url <url>`, `--no-tailor`, `--openai`, `--version`, `-v/--verbose`. See `pipenv run python generate_resume.py --help`.
+
 ---
 
 ## Project Structure
 
 ```
 ├── generate_resume.py          # CLI entry point
+├── tailor.py                   # AI tailoring (Ollama / OpenAI)
 ├── Makefile                    # Build targets
 ├── Pipfile                     # Python dependencies
 └── resources/
