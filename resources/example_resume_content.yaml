@@ -1,0 +1,29 @@
+# Example resume content (schema reference).
+# Copy to my-content/resume_content.yaml and replace with your own content.
+# See README and ARCHITECTURE.md for the full schema.
+
+summary: |
+  Your professional summary in one or two sentences.
+
+skills:
+  - category: "Languages"
+    items: "e.g. Python, Java, JavaScript"
+  - category: "Tools & Platforms"
+    items: "e.g. Git, Docker, AWS"
+
+experience:
+  - position: "Job Title"
+    organization: "Company Name"
+    date: "Month Year -- Present"
+    location: "City, Country"
+    bullets:
+      - "Achievement or responsibility."
+      - "Another bullet."
+
+projects:
+  - position: "Project Name"
+    organization: ""
+    date: ""
+    location: ""
+    bullets:
+      - "What you built or did."

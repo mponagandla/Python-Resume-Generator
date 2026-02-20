@@ -6,7 +6,7 @@ This document explains the internal architecture of the resume generator for con
 
 ## Content Layer (YAML)
 
-Content is stored in YAML files—`resume_content.yaml` or job-specific variants in `resources/job-descriptions/`. The schema defines four sections:
+Content is stored in YAML files. Your content lives in `my-content/` (gitignored): `my-content/resume_content.yaml` is the default source; job description files for tailoring go in `my-content/job-descriptions/`. Example and job-tailored variants ship in `resources/` (e.g. `resources/example_resume_content.yaml`, `resources/job-descriptions/`). The schema defines four sections:
 
 | Section     | Structure | Purpose |
 |------------|-----------|---------|
@@ -79,9 +79,9 @@ The build layer is orchestrated by the **Makefile**:
 
 ## AI Tailoring (Optional)
 
-The `tailor.py` module implements AI tailoring. The single source of truth for facts is the user's content (`resume_content.yaml`); the LLM only rephrases and emphasizes to match a job description—it does not add new experience, skills, or achievements.
+The `tailor.py` module implements AI tailoring. The single source of truth for facts is the user's content (default `my-content/resume_content.yaml`); the LLM only rephrases and emphasizes to match a job description—it does not add new experience, skills, or achievements.
 
-1. **Inputs** — Base content (`resume_content.yaml`) plus an optional job description (file path or URL).
+1. **Inputs** — Base content (default `my-content/resume_content.yaml`) plus an optional job description (file path or URL).
 2. **Integration** — When `--tailor` or `--tailor-url` is passed, `generate_resume.py` calls `tailor.tailor()` before loading content. The tailor returns a YAML string that is then loaded and rendered as usual.
 3. **LLM role** — Tailor bullets, emphasize relevant skills, adjust summary wording; output remains valid YAML conforming to the existing schema. The system prompt explicitly forbids inventing job titles, companies, dates, technologies, or achievements.
 4. **Backends** — Ollama (local, default) via HTTP API; optional OpenAI when `--openai` is used and `OPENAI_API_KEY` is set. Config: `RESUME_LLM_MODEL`, `OLLAMA_HOST`, `OPENAI_API_KEY` (see `.env.example`).

@@ -35,8 +35,9 @@ except ImportError:
 
 __version__ = "1.0.0"
 
-RESOURCES_DIR = Path(__file__).resolve().parent / "resources"
-CONTENT_FILE = RESOURCES_DIR / "resume_content.yaml"
+PROJECT_ROOT = Path(__file__).resolve().parent
+RESOURCES_DIR = PROJECT_ROOT / "resources"
+CONTENT_FILE = PROJECT_ROOT / "my-content" / "resume_content.yaml"
 OUTPUT_FILE = RESOURCES_DIR / "resume_sections.tex"
 
 
@@ -177,7 +178,7 @@ def parse_args() -> argparse.Namespace:
         "-i", "--input",
         type=Path,
         default=CONTENT_FILE,
-        help="Path to content YAML (default: resources/resume_content.yaml)",
+        help="Path to content YAML (default: my-content/resume_content.yaml)",
     )
     parser.add_argument(
         "-o", "--output",

@@ -43,7 +43,7 @@ pipenv install
 
 ## Quick Start
 
-1. Edit `resources/resume_content.yaml` with your summary, skills, experience, and projects.
+1. Create `my-content/` and add your resume content there (see `resources/example_resume_content.yaml` for the schema). Default content path is `my-content/resume_content.yaml` (this folder is gitignored so your content stays local).
 2. Run:
 
 ```bash
@@ -80,10 +80,10 @@ pipenv run python generate_resume.py
 make clean
 ```
 
-**Using a job-specific YAML** — Copy the desired variant to the default content path, then build:
+**Using a job-specific YAML** — Copy a variant to your content path, then build:
 
 ```bash
-cp resources/job-descriptions/github_software_engineer_iii.yaml resources/resume_content.yaml
+cp resources/job-descriptions/github_software_engineer_iii.yaml my-content/resume_content.yaml
 make build
 ```
 
@@ -91,15 +91,15 @@ make build
 
 ```bash
 # Tailor to a job description file, then build PDF
-make build-tailored JOB_DESC=path/to/job-description.txt
+make build-tailored JOB_DESC=my-content/job-descriptions/jd.txt
 
 # Or run the generator with options
-pipenv run python generate_resume.py --tailor path/to/jd.txt
+pipenv run python generate_resume.py --tailor my-content/job-descriptions/jd.txt
 pipenv run python generate_resume.py --tailor-url "https://example.com/job-posting"
 pipenv run python generate_resume.py --tailor jd.txt --openai   # use OpenAI instead of Ollama
 ```
 
-**CLI options** — `-i/--input` (content YAML path), `-o/--output` (output LaTeX path), `--tailor <path>`, `--tailor-url <url>`, `--no-tailor`, `--openai`, `--version`, `-v/--verbose`. See `pipenv run python generate_resume.py --help`.
+**CLI options** — `-i/--input` (content YAML path; default `my-content/resume_content.yaml`), `-o/--output` (output LaTeX path), `--tailor <path>`, `--tailor-url <url>`, `--no-tailor`, `--openai`, `--version`, `-v/--verbose`. See `pipenv run python generate_resume.py --help`.
 
 ---
 
@@ -110,11 +110,14 @@ pipenv run python generate_resume.py --tailor jd.txt --openai   # use OpenAI ins
 ├── tailor.py                   # AI tailoring (Ollama / OpenAI)
 ├── Makefile                    # Build targets
 ├── Pipfile                     # Python dependencies
+├── my-content/                 # Your resume & job JDs (gitignored)
+│   ├── resume_content.yaml     # Primary content source (default -i)
+│   └── job-descriptions/       # Private job description files
 └── resources/
     ├── resume.tex              # LaTeX document (layout, static sections)
-    ├── resume_content.yaml     # Primary content source
+    ├── example_resume_content.yaml  # Schema example
     ├── resume_sections.tex     # Generated (gitignored)
-    ├── job-descriptions/       # Job-tailored YAML variants
+    ├── job-descriptions/       # Example job-tailored YAML variants
     └── awesome-cv.cls          # Awesome-CV document class
 ```
 
