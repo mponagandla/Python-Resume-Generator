@@ -38,7 +38,11 @@ __version__ = "1.0.0"
 PROJECT_ROOT = Path(__file__).resolve().parent
 RESOURCES_DIR = PROJECT_ROOT / "resources"
 CONTENT_FILE = PROJECT_ROOT / "my-content" / "resume_content.yaml"
+PROFILE_FILE = PROJECT_ROOT / "my-content" / "user_profile.md"
 OUTPUT_FILE = RESOURCES_DIR / "resume_sections.tex"
+
+# Max characters per skill items line so PDF stays one line (Awesome-CV ~70% text width).
+SKILL_ITEMS_MAX_CHARS = 58
 
 
 def escape_latex(text: str) -> str:
@@ -77,8 +81,19 @@ def render_summary(summary: str) -> str:
 """
 
 
+def _truncate_skill_items(items_str: str, max_chars: int) -> str:
+    """Limit items string to max_chars so it fits on one line; truncate at last comma if over."""
+    if not items_str or len(items_str) <= max_chars:
+        return items_str
+    candidate = items_str[: max_chars + 1]
+    last_comma = candidate.rfind(",")
+    if last_comma > 0:
+        return items_str[:last_comma].strip()
+    return items_str[:max_chars].strip()
+
+
 def render_skills(skills: list[dict]) -> str:
-    """Render the Skills section."""
+    """Render the Skills section. One row per category; items truncated to fit one line."""
     lines = [
         "%--------------------------------------------------",
         "% Skills (condensed, Awesome-CV style)",
@@ -89,7 +104,15 @@ def render_skills(skills: list[dict]) -> str:
     ]
     for skill in skills:
         category = escape_latex(skill["category"])
-        items = escape_latex(skill["items"])
+        raw_items = skill.get("items", "")
+        # Schema expects items as string; LLM may output a list — normalize to one string.
+        if isinstance(raw_items, (list, tuple)):
+            items_str = ", ".join(str(x).strip() for x in raw_items)
+        else:
+            items_str = str(raw_items).strip() if raw_items else ""
+        items_str = _truncate_skill_items(items_str, SKILL_ITEMS_MAX_CHARS)
+        items = escape_latex(items_str)
+        items = items.replace(", ", ", \\allowbreak ")
         lines.append(f"\\cvskill{{{category}}}{{{items}}}")
     lines.extend(["\\end{cvskills}", ""])
     return "\n".join(lines)
@@ -157,13 +180,21 @@ def render_projects(projects: list[dict]) -> str:
         "",
     ]
     for entry in projects:
+        # LLM may output "name" instead of "position" for projects; accept both.
+        position = entry.get("position") or entry.get("name") or ""
+        bullets = entry.get("bullets")
+        if bullets is None and "description" in entry:
+            d = entry["description"]
+            bullets = [d] if isinstance(d, str) else list(d) if isinstance(d, (list, tuple)) else []
+        if bullets is None:
+            bullets = []
         lines.append(
             render_entry(
-                position=entry["position"],
+                position=position,
                 organization=entry.get("organization", ""),
                 date=entry.get("date", ""),
                 location=entry.get("location", ""),
-                bullets=entry.get("bullets", []),
+                bullets=bullets,
                 raw_position=entry.get("raw_position", False),
             )
         )
@@ -216,6 +247,13 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Enable verbose (debug) output.",
     )
+    parser.add_argument(
+        "--max-fact-error-rate",
+        type=float,
+        default=None,
+        metavar="RATE",
+        help="Max allowed share of LLM-introduced facts (0.0-1.0). Default from RESUME_TAILOR_MAX_FACT_ERROR_RATE (e.g. 0.2). Within limit, tailored content is accepted; over limit triggers a targeted rewrite of offending entries.",
+    )
     return parser.parse_args()
 
 
@@ -241,13 +279,39 @@ def main() -> None:
 
     if tailor_source:
         import tailor as tailor_mod
-        yaml_str = tailor_mod.tailor(
-            content_path,
-            tailor_source,
-            use_openai=args.openai,
-            verbose=args.verbose,
-        )
-        data = yaml.safe_load(yaml_str)
+        profile_path = PROFILE_FILE.resolve()
+        if profile_path.exists():
+            print("Tailoring resume from user profile + job description via LLM...", flush=True)
+            yaml_str = tailor_mod.tailor_from_profile(
+                profile_path,
+                tailor_source,
+                use_openai=args.openai,
+                verbose=args.verbose,
+                max_fact_error_rate=args.max_fact_error_rate,
+            )
+            if yaml_str is not None:
+                data = yaml.safe_load(yaml_str)
+            else:
+                # Fall back to resume_content.yaml and YAML-based tailoring
+                print("Falling back to resume_content.yaml for tailoring.", flush=True)
+                yaml_str = tailor_mod.tailor(
+                    content_path,
+                    tailor_source,
+                    use_openai=args.openai,
+                    verbose=args.verbose,
+                    max_fact_error_rate=args.max_fact_error_rate,
+                )
+                data = yaml.safe_load(yaml_str)
+        else:
+            print("Tailoring resume to job description via LLM (Ollama)...", flush=True)
+            yaml_str = tailor_mod.tailor(
+                content_path,
+                tailor_source,
+                use_openai=args.openai,
+                verbose=args.verbose,
+                max_fact_error_rate=args.max_fact_error_rate,
+            )
+            data = yaml.safe_load(yaml_str)
     else:
         with open(content_path, encoding="utf-8") as f:
             data = yaml.safe_load(f)
