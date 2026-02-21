@@ -1,13 +1,28 @@
+# Environment and secrets
+.env
+
+# Python
 .venv/
 __pycache__/
 *.pyc
+*.pyo
+
+# LaTeX build artifacts
 resources/resume_sections.tex
 resources/resume.pdf
-output/
 resources/*.aux
 resources/*.log
 resources/*.out
 resources/*.fls
 resources/*.fdb_latexmk
-resources/Manoj Ponagandla JavaPython Experis.pdf
+
+# Output and user content
+output/
 my-content/
+
+# Editor and OS
+.cursor/
+.DS_Store
+
+# Optional: keep one example PDF out of repo if desired
+resources/Manoj Ponagandla JavaPython Experis.pdf

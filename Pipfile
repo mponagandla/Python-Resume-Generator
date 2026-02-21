@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 pyyaml = ">=6.0"
 requests = ">=2.28"
+openai = "*"
 
 [dev-packages]
 

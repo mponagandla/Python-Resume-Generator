@@ -79,13 +79,21 @@ The build layer is orchestrated by the **Makefile**:
 
 ## AI Tailoring (Optional)
 
-The `tailor.py` module implements AI tailoring. The single source of truth for facts is the user's content (default `my-content/resume_content.yaml`); the LLM only rephrases and emphasizes to match a job description—it does not add new experience, skills, or achievements.
+The `tailor.py` module implements AI tailoring. There are two modes:
 
-1. **Inputs** — Base content (default `my-content/resume_content.yaml`) plus an optional job description (file path or URL).
-2. **Integration** — When `--tailor` or `--tailor-url` is passed, `generate_resume.py` calls `tailor.tailor()` before loading content. The tailor returns a YAML string that is then loaded and rendered as usual.
+### Profile-based tailoring (preferred when available)
+
+If `my-content/user_profile.md` exists, it is used as the **single source of truth**. The user fills this file once (Summary, Skills, Experience, Projects, Achievements, Certifications) in freeform text; see `resources/example_user_profile.md`. When `--tailor` or `--tailor-url` is used, `generate_resume.py` calls `tailor.tailor_from_profile()`: the LLM receives the profile text plus the job description and produces resume YAML (summary, skills, experience, projects) using **only** facts from the profile. `validate_tailored_against_profile(profile_text, tailored_data)` ensures every organization, position, and project in the output appears in the profile (normalized substring check). On LLM/parse/validation failure, the pipeline falls back to YAML-based tailoring using `resume_content.yaml`.
+
+### YAML-based tailoring (fallback or when no profile)
+
+When no profile file is present, the single source of truth is the user's content (default `my-content/resume_content.yaml`). The LLM only rephrases and emphasizes to match a job description—it does not add new experience, skills, or achievements.
+
+1. **Inputs** — Base content (default `my-content/resume_content.yaml`) or user profile (`my-content/user_profile.md` if present) plus an optional job description (file path or URL).
+2. **Integration** — When `--tailor` or `--tailor-url` is passed, `generate_resume.py` checks for `my-content/user_profile.md`. If it exists, it calls `tailor.tailor_from_profile()`; otherwise it calls `tailor.tailor()`. The tailor returns a YAML string that is then loaded and rendered as usual.
 3. **LLM role** — Tailor bullets, emphasize relevant skills, adjust summary wording; output remains valid YAML conforming to the existing schema. The system prompt explicitly forbids inventing job titles, companies, dates, technologies, or achievements.
 4. **Backends** — Ollama (local, default) via HTTP API; optional OpenAI when `--openai` is used and `OPENAI_API_KEY` is set. Config: `RESUME_LLM_MODEL`, `OLLAMA_HOST`, `OPENAI_API_KEY` (see `.env.example`).
-5. **Validation** — `validate_no_new_facts(base_data, tailored_data)` checks that the tailored output does not introduce new organizations, positions, or projects; if it does, the base content is used and a warning is logged.
-6. **Fallback** — On LLM failure, parse error, or validation failure, the pipeline uses the original base content and logs a warning.
+5. **Validation** — For profile mode: `validate_tailored_against_profile()`. For YAML mode: `validate_no_new_facts(base_data, tailored_data)`. If validation fails, base content is used (or profile tailoring is aborted and YAML fallback is used) and a warning is logged.
+6. **Fallback** — On LLM failure, parse error, or validation failure, the pipeline uses the original base content (or falls back to YAML-based tailoring when profile-based tailoring fails) and logs a warning.
 
 The pipeline remains: **Content (YAML or AI-tailored) → Render → Template → Build**, with AI as an optional preprocessing step before the content layer.
