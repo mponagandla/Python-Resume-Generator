@@ -27,7 +27,51 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = """You are a resume tailor. Your output must contain ONLY information that appears in the user's profile/content below. Do not invent job titles, companies, dates, technologies, projects, or achievements. You may rephrase, reorder, and emphasize to match the job description; you may not add new facts. Output valid YAML only, with keys: summary, skills, experience, projects. Use the same structure as the input (e.g. skills as list of {category, items}, experience/projects as list of {position, organization, date, location, bullets}). Preserve raw_position: true for project entries that need LaTeX in the position field. For skills, keep each category's items string to one line in the PDF (about 50–60 characters); use abbreviations or fewer items per category to avoid wrapping."""
+# Project root (for central configuration such as resume_config.yaml)
+PROJECT_ROOT = Path(__file__).resolve().parent
+
+SYSTEM_PROMPT = """You are an expert resume optimization engine specializing in senior software engineering roles.
+
+CRITICAL RULES:
+- Use ONLY facts that appear in the user’s provided profile.
+- Do NOT invent job titles, companies, dates, technologies, metrics, systems, or achievements.
+- You may rephrase, reorder, combine, and strategically emphasize.
+- You may elevate language to reflect senior-level ownership if the source supports it.
+- Do NOT fabricate impact metrics or outcomes.
+- If no measurable outcome is provided, focus on scope, responsibility, complexity, or technical depth instead of inventing results.
+
+OBJECTIVE:
+Maximize alignment with the provided job description while staying strictly within factual boundaries.
+
+OPTIMIZATION STRATEGY:
+1. Maximize keyword overlap with the job description (frameworks, cloud, methodologies, architecture terms).
+2. Prioritize bullets that directly map to required skills and responsibilities.
+3. Emphasize architecture, scalability, reliability, security, and leadership when supported.
+4. Reorder experience bullets so the most job-relevant items appear first.
+5. Use strong senior-level phrasing (e.g., “led architecture”, “designed scalable systems”, “drove modernization”) when supported by source content.
+6. Remove or de-emphasize less relevant content.
+7. Keep each bullet to one concise sentence.
+8. Keep tone enterprise-ready and professional.
+
+FORMAT REQUIREMENTS:
+- Output valid YAML only.
+- Keys: summary, skills, experience, projects.
+- Skills must be a list of {category, items}.
+- Experience and projects must be lists of:
+  {position, organization, date, location, bullets}.
+- Preserve raw_position: true for project entries requiring LaTeX.
+- Keep each skill category’s items string short enough to fit one PDF line (~50–60 characters).
+- Bullets must be concise single sentences.
+- Avoid multi-sentence bullets.
+
+SKILLS AND TECHNOLOGIES (IMPORTANT):
+- The skills section MUST include all major technologies, frameworks, and languages that appear in the profile (e.g. Next.js, TypeScript, GraphQL, React, Node.js, Java, Spring Boot, AWS, Kubernetes). Do not omit profile-mentioned technologies; you may reorder or group by relevance to the job description but must include them.
+- In experience bullets: include technologies mentioned in the source (e.g. GraphQL, TypeScript).
+- In project bullets: include the technologies used in each project (e.g. Next.js, Supabase); keep each bullet short so it fits one line (~60–70 characters).
+
+GOAL:
+Produce the most competitive, ATS-optimized, senior-level resume possible using ONLY the user’s factual content.
+"""
 
 USER_PROMPT_TEMPLATE = """Base resume content (YAML):
 ```yaml
@@ -39,17 +83,117 @@ Job description:
 {job_description}
 ```
 
-Produce tailored resume YAML that matches the job description while using ONLY the facts above. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
+Produce tailored resume YAML that matches the job description while using ONLY the facts above. For experience and projects, write each bullet as a short, single-sentence statement that combines action with impact or outcome when the result is present in the base content, preferring concise wording that is likely to stay on a single line in the PDF. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
 
 USER_PROMPT_NO_JD_TEMPLATE = """Base resume content (YAML):
 ```yaml
 {base_yaml}
 ```
 
-Produce a polished version of this resume YAML. Use ONLY the facts above; do not add any new information. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
+Produce a polished version of this resume YAML. Use ONLY the facts above; do not add any new information. For experience and projects, write each bullet as a short, single-sentence statement that combines action with impact or outcome when the result is present in the base content, preferring concise wording that is likely to stay on a single line in the PDF. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
 
 # Profile-based tailoring: user's freeform profile is the single source of truth.
-SYSTEM_PROMPT_PROFILE = """You are a resume generator. Your output must contain ONLY information that appears in the user's profile below. Do not invent job titles, companies, dates, technologies, projects, or achievements. You may rephrase, reorder, and emphasize to match the job description; you may not add new facts. Output valid YAML only, with keys: summary, skills, experience, projects. Use the structure: skills as list of {category, items}; experience and projects as list of {position, organization, date, location, bullets}. Preserve raw_position: true for project entries that need LaTeX in the position field. For skills, keep each category's items string to one line in the PDF (about 50–60 characters); use abbreviations or fewer items per category to avoid wrapping."""
+SYSTEM_PROMPT_PROFILE = """You are a senior-level resume optimization engine.
+
+CRITICAL ACCURACY RULES:
+- Use ONLY information that appears in the user’s profile.
+- Do NOT invent job titles, companies, dates, technologies, projects, certifications, metrics, responsibilities, or achievements.
+- Reuse organization names, job titles, and project names EXACTLY as written; do not create variants.
+- Do NOT fabricate impact metrics or add inferred outcomes.
+- If measurable impact is not explicitly stated, emphasize scope, ownership, complexity, architecture, or responsibility instead of inventing results.
+
+OBJECTIVE:
+Generate the most competitive, ATS-optimized resume possible while staying strictly within factual boundaries.
+
+OPTIMIZATION REQUIREMENTS:
+1. Maximize keyword alignment with the provided job description.
+2. Ensure all major required competencies appear at least once in summary, skills, or experience (if supported by profile).
+3. Prioritize and reorder bullets so the most job-relevant responsibilities appear first.
+4. Emphasize architecture, scalability, reliability, security, distributed systems, cloud, and leadership when supported.
+5. Use strong senior-level phrasing (e.g., “led architecture”, “designed scalable systems”, “drove modernization”) only if supported by the profile.
+6. Remove or de-emphasize content not relevant to the job description.
+7. Maintain enterprise-ready tone (avoid startup-style or tool-heavy phrasing unless relevant).
+
+STRUCTURE REQUIREMENTS:
+Output valid YAML only with keys:
+- summary
+- skills
+- experience
+- projects
+
+FORMAT RULES:
+- Skills must be a list of {category, items}.
+- Experience and projects must be lists of:
+  {position, organization, date, location, bullets}.
+- Preserve raw_position: true for project entries requiring LaTeX.
+- Each skill category’s items must fit one PDF line (~50–60 characters).
+- Each bullet must be a concise, single-sentence statement.
+- Avoid multi-sentence bullets.
+- Avoid filler adjectives.
+- Avoid generic claims not supported by profile content.
+
+SKILLS AND TECHNOLOGIES (IMPORTANT):
+- The skills section MUST include all major technologies, frameworks, and languages that appear in the profile (e.g. Next.js, TypeScript, GraphQL, React, Node.js, Java, Spring Boot, AWS, Kubernetes). Do not omit profile-mentioned technologies; you may reorder or group by relevance to the job description but must include them.
+- In experience bullets: where the profile mentions specific technologies (e.g. GraphQL, TypeScript), include them in the corresponding bullets.
+- In project bullets: include the technologies used in each project when the profile states them (e.g. Next.js, TypeScript, Supabase, FastAPI). Keep each project bullet short so it fits one line in the PDF (aim for ~60–70 characters); prefer "Built X with Next.js and Supabase" over long lists.
+
+BULLET WRITING RULES:
+- Focus on action + technical depth. Keep every bullet to one concise sentence that fits one line.
+- When impact metrics exist, include them exactly as stated.
+"""
+
+
+def _load_config() -> dict:
+    """
+    Load central configuration from resume_config.yaml in the project root.
+
+    Returns an empty dict if the file is missing or invalid.
+    """
+    config_path = PROJECT_ROOT / "resume_config.yaml"
+    if not config_path.exists():
+        return {}
+    try:
+        with open(config_path, encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+        if not isinstance(data, dict):
+            return {}
+        return data
+    except yaml.YAMLError as e:
+        logger.warning("Failed to parse config file %s: %s", config_path, e)
+        return {}
+
+
+def _get_config_fact_error_rate(context: Optional[str] = None) -> Optional[float]:
+    """
+    Look up max fact error rate from config, optionally by context.
+
+    Expected structure in resume_config.yaml:
+        fact_error:
+          default: 0.2
+          profile: 0.2
+          base_yaml: 0.2
+    """
+    cfg = _load_config()
+    fact_cfg = cfg.get("fact_error")
+    if not isinstance(fact_cfg, dict):
+        return None
+
+    keys_to_try: list[str] = []
+    if context:
+        keys_to_try.append(context)
+    keys_to_try.append("default")
+
+    for key in keys_to_try:
+        if key not in fact_cfg:
+            continue
+        try:
+            value = float(fact_cfg[key])
+        except (TypeError, ValueError):
+            continue
+        # Clamp to [0.0, 1.0]
+        return max(0.0, min(1.0, value))
+
+    return None
 
 USER_PROMPT_PROFILE_TEMPLATE = """User profile (everything the user has provided about themselves):
 ```
@@ -61,14 +205,14 @@ Job description:
 {job_description}
 ```
 
-Produce tailored resume YAML that matches the job description while using ONLY the facts from the user profile above. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
+Produce tailored resume YAML that matches the job description while using ONLY the facts from the user profile above. Include in the skills section all key technologies from the profile and mention them in experience bullets where relevant. For projects, include the technologies used (e.g. Next.js, TypeScript, Supabase) in each project's bullets, keeping each bullet short enough for one line (~60–70 chars). For experience and projects, write each bullet as a short, single-sentence statement that combines action with impact or outcome when the result is present in the profile. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
 
 USER_PROMPT_PROFILE_NO_JD_TEMPLATE = """User profile (everything the user has provided about themselves):
 ```
 {profile_text}
 ```
 
-Produce resume YAML from this profile. Use ONLY the facts above; do not add any new information. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
+Produce resume YAML from this profile. Use ONLY the facts above; do not add any new information. Include in the skills section all key technologies from the profile and mention them in experience bullets where relevant. For projects, include the technologies used (e.g. Next.js, TypeScript, Supabase) in each project's bullets, keeping each bullet short enough for one line (~60–70 chars). For experience and projects, write each bullet as a short, single-sentence statement that combines action with impact or outcome when the result is present in the profile. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
 
 # Rewrite-only prompt: fix specific experience/project entries that contain facts not in the source.
 SYSTEM_PROMPT_REWRITE = """You are a resume editor. Your task is to rewrite only the given experience or project entries so they use ONLY facts from the source of truth below. Do not add new companies, job titles, or projects. Output valid YAML with keys "experience" and/or "projects" containing only the corrected entries in the same order as given. Preserve raw_position: true for project entries that need LaTeX in the position field."""
@@ -148,7 +292,8 @@ def _call_openai(prompt: str, system: str, verbose: bool = False) -> str:
             {"role": "system", "content": system},
             {"role": "user", "content": prompt},
         ],
-        temperature=0.3,
+        # Lower temperature for more deterministic, well-structured YAML.
+        temperature=0.1,
     )
     return resp.choices[0].message.content or ""
 
@@ -524,13 +669,38 @@ def _rewrite_entries_with_facts(
     return result
 
 
-def _get_max_fact_error_rate(max_fact_error_rate: Optional[float]) -> float:
-    """Resolve max fact error rate from env or argument (default 0.20)."""
+def _get_max_fact_error_rate(
+    max_fact_error_rate: Optional[float],
+    *,
+    context: Optional[str] = None,
+) -> float:
+    """
+    Resolve max fact error rate from CLI, config, env, or default (in that order).
+
+    Precedence:
+      1. Explicit argument (from CLI --max-fact-error-rate).
+      2. Config file (resume_config.yaml) for the given context or default.
+      3. Environment variable RESUME_TAILOR_MAX_FACT_ERROR_RATE.
+      4. Hard-coded default 0.2.
+    """
+    # 1) CLI flag
     if max_fact_error_rate is not None:
-        return max(0.0, min(1.0, float(max_fact_error_rate)))
+        try:
+            return max(0.0, min(1.0, float(max_fact_error_rate)))
+        except (TypeError, ValueError):
+            pass
+
+    # 2) Config file
+    cfg_value = _get_config_fact_error_rate(context=context)
+    if cfg_value is not None:
+        return cfg_value
+
+    # 3) Environment variable
     try:
-        return max(0.0, min(1.0, float(os.environ.get("RESUME_TAILOR_MAX_FACT_ERROR_RATE", "0.2"))))
+        env_val = float(os.environ.get("RESUME_TAILOR_MAX_FACT_ERROR_RATE", "0.2"))
+        return max(0.0, min(1.0, env_val))
     except (TypeError, ValueError):
+        # 4) Hard-coded default
         return 0.2
 
 
@@ -580,6 +750,10 @@ def tailor_from_profile(
     if not profile_text.strip():
         logger.warning("User profile is empty.")
         return None
+    if verbose:
+        # Confirm profile is passed to the LLM (user can verify key terms are present).
+        logger.debug("Profile loaded: %d chars", len(profile_text))
+        print(f"Profile loaded ({len(profile_text)} chars) — full content will be sent to the LLM.", file=sys.stderr, flush=True)
 
     if job_description_source:
         jd_source = job_description_source.strip()
@@ -622,7 +796,7 @@ def tailor_from_profile(
     total_entities = detail["total_entities"]
     violating_entities = detail["violating_entities"]
     error_rate = (violating_entities / total_entities) if total_entities else 0.0
-    threshold = _get_max_fact_error_rate(max_fact_error_rate)
+    threshold = _get_max_fact_error_rate(max_fact_error_rate, context="profile")
 
     if error_rate <= threshold:
         if error_rate > 0:
@@ -738,7 +912,7 @@ def tailor(
     total_entities = detail["total_entities"]
     violating_entities = detail["violating_entities"]
     error_rate = (violating_entities / total_entities) if total_entities else 0.0
-    threshold = _get_max_fact_error_rate(max_fact_error_rate)
+    threshold = _get_max_fact_error_rate(max_fact_error_rate, context="base_yaml")
 
     if error_rate <= threshold:
         if error_rate > 0:
