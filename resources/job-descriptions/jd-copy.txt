@@ -1,0 +1,24 @@
+Job Description:
+This contingent resource assignment is within the Wealth and Investment Management Technology (WIMT) group, supporting the Portfolio Management Platform (PMP) area. The role involves contributing to software engineering initiatives that support portfolio management capabilities across advisory platforms. The position demands a solid understanding of software engineering principles, compliance requirements, and the ability to collaborate strategically to meet delivery goals.
+
+This is a full-stack engineering role for someone who hands-on in the code. We’re looking for a doer—an engineer who takes ownership, leads by example, and actively contributes to implementation. A deep passion for technology is essential, especially if it extends beyond work. We value engineers who are curious, proactive, and continuously seeking to improve their craft. The team uses Microsoft Copilot and GitHub Copilot, so candidates must be open to leveraging AI tools to maximize productivity and innovation.
+________________________________________
+Required Qualifications
+• 4+ years of Software Engineering experience, or equivalent demonstrated through one or a combination of the following: work or consulting experience, training, military experience, or education.
+________________________________________
+Preferred Skills
+• Spring Framework, including Spring Boot (Building JSON REST APIs)
+• ReactJS + TypeScript
+• MongoDB
+• Apache Kafka
+• Experience with full-stack development
+• Experience writing unit tests, e.g. JUnit with Mockito, Jest
+• Experience with automated testing, e.g. Rest Assured, Selenium or Playwright
+• Familiarity with cloud technologies
+• Experience with GitHub hooks and automation
+• Familiarity with AI-assisted development tools like Microsoft Copilot and GitHub Copilot
+• Strong delivery mindset with the ability to lead while contributing directly to code
+• Passion for technology, including interests outside of work
+________________________________________
+Location
+Acceptable work locations for this role are St. Louis, MO and Charlotte, NC.
