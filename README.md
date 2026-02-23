@@ -91,7 +91,7 @@ This copies `resources/example_user_profile.md` to `my-content/user_profile.md`.
 **Using a job-specific YAML** — Copy a variant to your content path, then build:
 
 ```bash
-cp resources/job-descriptions/github_software_engineer_iii.yaml my-content/resume_content.yaml
+cp misc/job-descriptions/github_software_engineer_iii.yaml my-content/resume_content.yaml
 make build
 ```
 
@@ -156,8 +156,9 @@ You might want a stricter threshold for **profile-based tailoring** (to prevent 
     ├── example_resume_content.yaml  # Schema example
     ├── example_user_profile.md # User profile template for tailoring
     ├── resume_sections.tex     # Generated (gitignored)
-    ├── job-descriptions/      # Example job-tailored YAML variants
     └── awesome-cv.cls          # Awesome-CV document class
+misc/
+  └── job-descriptions/        # Example job descriptions & tailored YAML variants
 ```
 
 ---

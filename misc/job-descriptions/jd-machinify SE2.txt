@@ -1,0 +1,2 @@
+Previously contained a full Machinify Staff Backend Engineer job description (web copy with application form).
+Original detailed text is still available in git history under resources/job-descriptions/jd-machinify SE2.txt.
