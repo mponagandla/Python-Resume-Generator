@@ -91,7 +91,7 @@ This copies `resources/example_user_profile.md` to `my-content/user_profile.md`.
 **Using a job-specific YAML** — Copy a variant to your content path, then build:
 
 ```bash
-cp resources/job-descriptions/github_software_engineer_iii.yaml my-content/resume_content.yaml
+cp misc/job-descriptions/github_software_engineer_iii.yaml my-content/resume_content.yaml
 make build
 ```
 
@@ -107,7 +107,35 @@ pipenv run python generate_resume.py --tailor-url "https://example.com/job-posti
 pipenv run python generate_resume.py --tailor jd.txt --openai   # use OpenAI instead of Ollama
 ```
 
-**CLI options** — `-i/--input` (content YAML path; default `my-content/resume_content.yaml`), `-o/--output` (output LaTeX path), `--tailor <path>`, `--tailor-url <url>`, `--no-tailor`, `--openai`, `--version`, `-v/--verbose`. See `pipenv run python generate_resume.py --help`.
+**CLI options** — `-i/--input` (content YAML path; default `my-content/resume_content.yaml`), `-o/--output` (output LaTeX path), `--tailor <path>`, `--tailor-url <url>`, `--no-tailor`, `--openai`, `--version`, `-v/--verbose`, `--max-fact-error-rate`. See `pipenv run python generate_resume.py --help`.
+
+---
+
+## Configuration
+
+You can control LLM validation thresholds via a central config file at `resume_config.yaml` in the project root:
+
+```yaml
+fact_error:
+  # Default maximum share of introduced facts allowed (0.0–1.0).
+  default: 0.2
+
+  # Optional, more specific thresholds:
+  # - profile: used for profile-based tailoring (tailor_from_profile).
+  # - base_yaml: used for base YAML tailoring (tailor).
+  # If omitted, these fall back to "default".
+  # profile: 0.2
+  # base_yaml: 0.2
+```
+
+**Precedence** when resolving the max fact error rate:
+
+- **CLI flag** `--max-fact-error-rate` (highest precedence)
+- Then **config file** (`resume_config.yaml`)
+- Then **environment variable** `RESUME_TAILOR_MAX_FACT_ERROR_RATE`
+- Finally a hard-coded default of `0.2`
+
+You might want a stricter threshold for **profile-based tailoring** (to prevent adding facts not in your profile) and a slightly more relaxed one for **base YAML tailoring**, depending on how close your base content is to the desired output.
 
 ---
 
@@ -128,8 +156,9 @@ pipenv run python generate_resume.py --tailor jd.txt --openai   # use OpenAI ins
     ├── example_resume_content.yaml  # Schema example
     ├── example_user_profile.md # User profile template for tailoring
     ├── resume_sections.tex     # Generated (gitignored)
-    ├── job-descriptions/      # Example job-tailored YAML variants
     └── awesome-cv.cls          # Awesome-CV document class
+misc/
+  └── job-descriptions/        # Example job descriptions & tailored YAML variants
 ```
 
 ---

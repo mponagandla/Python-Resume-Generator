@@ -25,6 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import argparse
 import logging
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 try:
@@ -252,7 +253,7 @@ def parse_args() -> argparse.Namespace:
         type=float,
         default=None,
         metavar="RATE",
-        help="Max allowed share of LLM-introduced facts (0.0-1.0). Default from RESUME_TAILOR_MAX_FACT_ERROR_RATE (e.g. 0.2). Within limit, tailored content is accepted; over limit triggers a targeted rewrite of offending entries.",
+        help="Max allowed share of LLM-introduced facts (0.0-1.0). Overrides config/env. Within limit, tailored content is accepted; over limit triggers a targeted rewrite of offending entries.",
     )
     return parser.parse_args()
 
@@ -333,10 +334,13 @@ def main() -> None:
     output = "\n".join(sections)
     out_path = args.output.resolve()
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    gen_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    # Prepend a generation timestamp so you can verify the file is updated on each run.
     with open(out_path, "w", encoding="utf-8") as f:
+        f.write(f"% Generated: {gen_time}\n")
         f.write(output)
 
-    print(f"Generated {out_path}")
+    print(f"Generated {out_path} at {gen_time}")
 
 
 if __name__ == "__main__":

@@ -12,14 +12,14 @@ build: generate
 
 # Tailor resume to a job description then build.
 # Usage: make build-tailored JOB_DESC=path/to/jd.txt
-# Use OpenAI instead of Ollama: make build-tailored JOB_DESC=path/to/jd.txt OPENAI=1 (requires OPENAI_API_KEY in .env)
+# Use OpenAI instead of Ollama: make build-tailored JOB_DESC=misc/job-descriptions/jd.txt OPENAI=1 (requires OPENAI_API_KEY in .env)
 build-tailored:
-	@if [ -z "$(JOB_DESC)" ]; then echo "Error: JOB_DESC required. Example: make build-tailored JOB_DESC=resources/job-descriptions/jd.txt"; exit 1; fi
+	@if [ -z "$(JOB_DESC)" ]; then echo "Error: JOB_DESC required. Example: make build-tailored JOB_DESC=misc/job-descriptions/jd.txt"; exit 1; fi
 	pipenv run python generate_resume.py --tailor "$(JOB_DESC)" $(if $(OPENAI),--openai,)
 	cd resources && xelatex -interaction=batchmode resume.tex
 	@timestamp=$$(date +%Y%m%d-%H%M%S); \
 	mkdir -p output; \
-	cp resources/resume.pdf output/resume-$$timestamp.pdf; \
+	cp resources/resume.pdf output/"Manoj Ponagandla"-$$timestamp.pdf; \
 	echo "Saved output/resume-$$timestamp.pdf"
 
 # Copy example user profile to my-content so you can fill it once and use it for tailoring.

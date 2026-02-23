@@ -1,0 +1,12 @@
+fact_error:
+  # Default maximum share of introduced facts allowed (0.0–1.0).
+  # Used when no more specific context value is set.
+  default: 0.2
+
+  # Optional, more specific thresholds:
+  # - profile: used for profile-based tailoring (tailor_from_profile).
+  # - base_yaml: used for base YAML tailoring (tailor).
+  # If omitted, these fall back to "default".
+  # profile: 0.2
+  # base_yaml: 0.2
+

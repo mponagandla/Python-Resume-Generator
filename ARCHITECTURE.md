@@ -6,7 +6,7 @@ This document explains the internal architecture of the resume generator for con
 
 ## Content Layer (YAML)
 
-Content is stored in YAML files. Your content lives in `my-content/` (gitignored): `my-content/resume_content.yaml` is the default source; job description files for tailoring go in `my-content/job-descriptions/`. Example and job-tailored variants ship in `resources/` (e.g. `resources/example_resume_content.yaml`, `resources/job-descriptions/`). The schema defines four sections:
+Content is stored in YAML files. Your content lives in `my-content/` (gitignored): `my-content/resume_content.yaml` is the default source; job description files for tailoring go in `my-content/job-descriptions/`. Example and job-tailored variants ship in `resources/` (e.g. `resources/example_resume_content.yaml`) and `misc/job-descriptions/`. The schema defines four sections:
 
 | Section     | Structure | Purpose |
 |------------|-----------|---------|

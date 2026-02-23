@@ -1,0 +1,26 @@
+Ascension Health
+Senior Software Engineer 
+Remote
+70-75 hourly/W2 
+
+Job Description
+This role will be a senior individual contributor and technical leader on a collaborative team building cloud-native, healthcare-focused applications on Google Cloud Platform (GCP). The Staff Software Engineer will design, build, and operate secure, scalable, high-performance end-to-end solutions using Java/Spring Boot microservices and modern web frameworks such as Next.js and ReactJS. This role partners closely with Product Management, UX, Analytics, and cross-functional engineering teams to deliver impactful solutions that advance the client's mission of providing compassionate, personalized care through technology.
+Edit Job Description
+Job Responsibilities
+Key Responsibilities:
+
+Lead the architecture, design, and development of secure, scalable, and high‑performing full‑stack solutions.
+Provide technical leadership and mentorship to senior engineers and team members across backend and frontend domains.
+Design, build, and secure scalable RESTful APIs and GraphQL endpoints.
+Develop high‑quality, maintainable backend services using Java and Spring Boot. 
+Develop modern, performant web applications using Next.js / ReactJS, JavaScript, and TypeScript.
+Implement Test‑Driven Development (TDD) and ensure strong unit and integration test coverage.
+Conduct comprehensive code and architectural reviews; ensure compliance with quality, security, and performance standards.
+Drive engineering best practices and coding standards across teams to improve reliability and scalability.
+Participate in Agile ceremonies (sprint planning, reviews, retrospectives) and produce clear technical documentation and architecture designs.
+Communicate effectively across teams and departments, influencing technical direction and architectural decisions.
+Independently address and resolve high‑priority technical issues.
+Partner with Product Management, UX, Analytics, and Support to align on roadmap priorities and technical trade‑offs.
+Lead major refactors, system redesigns, and long‑term technical improvements while balancing technical debt and business needs.
+Develop reusable frameworks, shared components, and internal tooling.
+Lead postmortems and implement sustainable improvements based on learnings.

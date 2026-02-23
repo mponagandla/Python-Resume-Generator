@@ -1,0 +1,2 @@
+Previously contained a full Flex Risk Engineering job description.
+Original detailed text is still available in git history under resources/job-descriptions/jd flex SE2.txt.
