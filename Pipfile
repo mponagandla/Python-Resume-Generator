@@ -7,6 +7,10 @@ name = "pypi"
 pyyaml = ">=6.0"
 requests = ">=2.28"
 openai = "*"
+langchain = "*"
+langchain-core = "*"
+langchain-openai = "*"
+langchain-ollama = "*"
 
 [dev-packages]
 

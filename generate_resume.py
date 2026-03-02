@@ -202,6 +202,35 @@ def render_projects(projects: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def render_yaml_to_latex(yaml_str_or_data: str | dict, output_path: Path) -> None:
+    """
+    Render resume YAML (string or dict) to LaTeX and write to output_path.
+    Used by main() and by the chat agent's generate_resume tool.
+    """
+    if isinstance(yaml_str_or_data, str):
+        data = yaml.safe_load(yaml_str_or_data)
+    else:
+        data = yaml_str_or_data
+    if not data:
+        raise ValueError("Content is empty.")
+    sections = []
+    if "summary" in data:
+        sections.append(render_summary(data["summary"]))
+    if "skills" in data:
+        sections.append(render_skills(data["skills"]))
+    if "experience" in data:
+        sections.append(render_experience(data["experience"]))
+    if "projects" in data:
+        sections.append(render_projects(data["projects"]))
+    output = "\n".join(sections)
+    output_path = output_path.resolve()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    gen_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(f"% Generated: {gen_time}\n")
+        f.write(output)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Generate resume_sections.tex from resume content YAML. Optionally tailor content to a job description using an LLM."
@@ -321,27 +350,15 @@ def main() -> None:
         print("Error: Content file is empty.", file=sys.stderr)
         sys.exit(1)
 
-    sections = []
-    if "summary" in data:
-        sections.append(render_summary(data["summary"]))
-    if "skills" in data:
-        sections.append(render_skills(data["skills"]))
-    if "experience" in data:
-        sections.append(render_experience(data["experience"]))
-    if "projects" in data:
-        sections.append(render_projects(data["projects"]))
-
-    output = "\n".join(sections)
     out_path = args.output.resolve()
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    gen_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
-    # Prepend a generation timestamp so you can verify the file is updated on each run.
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(f"% Generated: {gen_time}\n")
-        f.write(output)
-
-    print(f"Generated {out_path} at {gen_time}")
+    render_yaml_to_latex(data, out_path)
+    print(f"Generated {out_path}")
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1 and sys.argv[1] == "chat":
+        sys.argv = [sys.argv[0]] + sys.argv[2:]
+        from resume_agent import main as chat_main
+        chat_main()
+    else:
+        main()
