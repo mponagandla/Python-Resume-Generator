@@ -24,6 +24,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import argparse
 import logging
+import shutil
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -200,6 +202,36 @@ def render_projects(projects: list[dict]) -> str:
             )
         )
     return "\n".join(lines)
+
+
+def compile_latex_to_pdf(resources_dir: Path | None = None) -> Path | None:
+    """
+    Compile resume.tex to PDF using xelatex. Returns the path to the generated PDF,
+    or None if compilation fails (e.g. xelatex not installed).
+    """
+    resources_dir = resources_dir or RESOURCES_DIR
+    resume_tex = resources_dir / "resume.tex"
+    if not resume_tex.exists():
+        return None
+    try:
+        subprocess.run(
+            ["xelatex", "-interaction=batchmode", "resume.tex"],
+            cwd=resources_dir,
+            check=True,
+            capture_output=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+    pdf_path = resources_dir / "resume.pdf"
+    if not pdf_path.exists():
+        return None
+    # Copy to output/ with timestamp (like Makefile)
+    output_dir = PROJECT_ROOT / "output"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    output_pdf = output_dir / f"resume-{timestamp}.pdf"
+    shutil.copy2(pdf_path, output_pdf)
+    return output_pdf
 
 
 def render_yaml_to_latex(yaml_str_or_data: str | dict, output_path: Path) -> None:

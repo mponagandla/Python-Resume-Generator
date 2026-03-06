@@ -22,7 +22,7 @@ DEFAULT_OUTPUT = PROJECT_ROOT / "resources" / "resume_sections.tex"
 def _get_tools(default_profile_path: Path, use_openai: bool = False):
     """Build LangChain tools that close over default_profile_path and use_openai."""
     import tailor
-    from generate_resume import render_yaml_to_latex
+    from generate_resume import compile_latex_to_pdf, render_yaml_to_latex
 
     from langchain_core.tools import tool
 
@@ -70,8 +70,8 @@ def _get_tools(default_profile_path: Path, use_openai: bool = False):
         output_path: Optional[str] = None,
     ) -> str:
         """Generate a tailored resume from the user profile and optionally a job description.
-        Writes LaTeX to the output path. Use this when the user wants to generate or regenerate
-        their resume. profile_path is required. jd_path is optional (file or URL). skills_to_highlight
+        Writes LaTeX to the output path, then compiles to PDF. Use this when the user wants to generate
+        or regenerate their resume. profile_path is required. jd_path is optional (file or URL). skills_to_highlight
         can be a comma-separated list of skills to emphasize (e.g. 'AWS, Kubernetes, leadership').
         extra_instructions can be any additional guidance (e.g. 'emphasize backend and scalability').
         output_path defaults to resources/resume_sections.tex if not provided."""
@@ -107,7 +107,10 @@ def _get_tools(default_profile_path: Path, use_openai: bool = False):
             if yaml_str is None:
                 return "Error: Resume tailoring failed (LLM or validation error). Try again or check the profile."
             render_yaml_to_latex(yaml_str, out_path)
-            return f"Generated resume at {out_path}"
+            pdf_path = compile_latex_to_pdf()
+            if pdf_path:
+                return f"Generated resume PDF at {pdf_path}"
+            return f"Generated LaTeX at {out_path}. (PDF compilation failed—ensure XeLaTeX is installed. Run 'make build' to compile manually.)"
         except Exception as e:
             return f"Error generating resume: {e}"
 
@@ -147,7 +150,7 @@ When the user wants to generate a resume:
 3. If they mention specific skills to emphasize (e.g. "highlight AWS and Kubernetes"), pass them as skills_to_highlight (comma-separated)
 4. If they give other instructions (e.g. "emphasize backend", "focus on leadership"), pass them as extra_instructions
 
-Be concise and helpful. Confirm what you're doing before calling generate_resume."""
+IMPORTANT: When the user confirms they want to proceed (e.g. "yes", "proceed", "generate", "go ahead") and you have already loaded their profile and job description in this conversation, call generate_resume immediately. Do not ask for the same information again."""
     agent = create_agent(
         model=model,
         tools=tools,
@@ -178,6 +181,7 @@ def run_chat(use_openai: bool = False, default_profile: Optional[Path] = None) -
     print("Resume Assistant — type your message (or 'exit'/'quit' to leave)", flush=True)
     print(f"Default profile: {profile}", flush=True)
     print("-" * 50, flush=True)
+    messages: list = []
     while True:
         try:
             user_input = input("You: ").strip()
@@ -190,7 +194,9 @@ def run_chat(use_openai: bool = False, default_profile: Optional[Path] = None) -
             print("Goodbye.", flush=True)
             break
         try:
-            result = agent.invoke({"messages": [{"role": "user", "content": user_input}]})
+            messages.append({"role": "user", "content": user_input})
+            result = agent.invoke({"messages": messages})
+            messages = result.get("messages", messages)
             response = _extract_final_response(result)
             print(f"\nAssistant: {response}\n", flush=True)
         except Exception as e:
