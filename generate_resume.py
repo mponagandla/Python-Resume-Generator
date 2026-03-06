@@ -385,6 +385,14 @@ def main() -> None:
     out_path = args.output.resolve()
     render_yaml_to_latex(data, out_path)
     print(f"Generated {out_path}")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    gen_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    # Prepend a generation timestamp so you can verify the file is updated on each run.
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write(f"% Generated: {gen_time}\n")
+        f.write(output)
+
+    print(f"Generated {out_path} at {gen_time}")
 
 
 if __name__ == "__main__":
