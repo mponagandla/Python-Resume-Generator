@@ -91,7 +91,6 @@ Job description:
 ```
 
 Produce tailored resume YAML that matches the job description while using ONLY the facts above. For experience and projects, write detailed bullets: include what you did, technologies or methods used, and outcome or impact when present in the base content. Each bullet can be one or two sentences so that scope and results are clear. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
-Produce tailored resume YAML that matches the job description while using ONLY the facts above. For experience and projects, write each bullet as a short, single-sentence statement that combines action with impact or outcome when the result is present in the base content, preferring concise wording that is likely to stay on a single line in the PDF. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
 
 USER_PROMPT_NO_JD_TEMPLATE = """Base resume content (YAML):
 ```yaml
@@ -99,7 +98,6 @@ USER_PROMPT_NO_JD_TEMPLATE = """Base resume content (YAML):
 ```
 
 Produce a polished version of this resume YAML. Use ONLY the facts above; do not add any new information. For experience and projects, write detailed bullets: include what you did, technologies or methods used, and outcome or impact when present in the base content. Each bullet can be one or two sentences so that scope and results are clear. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
-Produce a polished version of this resume YAML. Use ONLY the facts above; do not add any new information. For experience and projects, write each bullet as a short, single-sentence statement that combines action with impact or outcome when the result is present in the base content, preferring concise wording that is likely to stay on a single line in the PDF. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
 
 # Profile-based tailoring: user's freeform profile is the single source of truth.
 SYSTEM_PROMPT_PROFILE = """You are a senior-level resume optimization engine.
@@ -221,7 +219,6 @@ Job description:
 ```
 
 Produce tailored resume YAML that matches the job description while using ONLY the facts from the user profile above. Include in the skills section all key technologies from the profile and mention them in experience bullets where relevant. For experience and projects, write detailed bullets: include what was done, technologies or methods used, and outcome or impact when present in the profile. Each bullet can be one or two sentences so that scope and results are clear. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
-Produce tailored resume YAML that matches the job description while using ONLY the facts from the user profile above. Include in the skills section all key technologies from the profile and mention them in experience bullets where relevant. For projects, include the technologies used (e.g. Next.js, TypeScript, Supabase) in each project's bullets, keeping each bullet short enough for one line (~60–70 chars). For experience and projects, write each bullet as a short, single-sentence statement that combines action with impact or outcome when the result is present in the profile. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
 
 USER_PROMPT_PROFILE_NO_JD_TEMPLATE = """User profile (everything the user has provided about themselves):
 ```
@@ -229,7 +226,6 @@ USER_PROMPT_PROFILE_NO_JD_TEMPLATE = """User profile (everything the user has pr
 ```
 
 Produce resume YAML from this profile. Use ONLY the facts above; do not add any new information. Include in the skills section all key technologies from the profile and mention them in experience bullets where relevant. For experience and projects, write detailed bullets: include what was done, technologies or methods used, and outcome or impact when present in the profile. Each bullet can be one or two sentences so that scope and results are clear. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
-Produce resume YAML from this profile. Use ONLY the facts above; do not add any new information. Include in the skills section all key technologies from the profile and mention them in experience bullets where relevant. For projects, include the technologies used (e.g. Next.js, TypeScript, Supabase) in each project's bullets, keeping each bullet short enough for one line (~60–70 chars). For experience and projects, write each bullet as a short, single-sentence statement that combines action with impact or outcome when the result is present in the profile. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
 
 # Rewrite-only prompt: fix specific experience/project entries that contain facts not in the source.
 SYSTEM_PROMPT_REWRITE = """You are a resume editor. Your task is to rewrite only the given experience or project entries so they use ONLY facts from the source of truth below. Do not add new companies, job titles, or projects. Output valid YAML with keys "experience" and/or "projects" containing only the corrected entries in the same order as given. Preserve raw_position: true for project entries that need LaTeX in the position field."""

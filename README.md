@@ -20,6 +20,7 @@ The tool reads resume content from YAML (summary, skills, experience, projects),
 - **Job-specific variants** — Maintain multiple YAML versions for different roles
 - **AI tailoring (optional)** — Generate a resume tailored to a job description. With a **user profile** (`my-content/user_profile.md`), the LLM builds resume content from that profile only. Without it, tailoring rephrases/emphasizes your existing YAML; the LLM never adds new experience or skills
 - **Chat agent (optional)** — Interactive terminal chat with an agent that can load your profile, load job descriptions, and generate tailored resumes with skills to highlight and custom instructions
+- **Word document output (optional)** — Generate editable .docx files matching the PDF formatting. Use `--format docx` or ask the agent for an "editable document"
 - **Simple build** — One command to generate and compile
 
 ---
@@ -75,6 +76,13 @@ Or directly:
 pipenv run python generate_resume.py
 ```
 
+**Generate Word document** (editable .docx, matches PDF formatting):
+
+```bash
+make build-docx
+# Or: pipenv run python generate_resume.py --format docx
+```
+
 **Clean build artifacts**:
 
 ```bash
@@ -102,8 +110,12 @@ make build
 # Tailor to a job description file, then build PDF
 make build-tailored JOB_DESC=my-content/job-descriptions/jd.txt
 
+# Word document instead of PDF
+make build-tailored JOB_DESC=my-content/job-descriptions/jd.txt FORMAT=docx
+
 # Or run the generator with options
 pipenv run python generate_resume.py --tailor my-content/job-descriptions/jd.txt
+pipenv run python generate_resume.py --tailor my-content/job-descriptions/jd.txt --format docx  # Word output
 pipenv run python generate_resume.py --tailor-url "https://example.com/job-posting"
 pipenv run python generate_resume.py --tailor jd.txt --openai   # use OpenAI instead of Ollama
 ```
@@ -116,9 +128,9 @@ pipenv run python generate_resume.py chat --openai          # use OpenAI for the
 pipenv run python generate_resume.py chat --profile path/to/profile.md
 ```
 
-Example prompts: "Generate my resume for the JD in resources/job-descriptions/jd.txt", "Highlight AWS, Kubernetes, and leadership", "Use my profile and emphasize backend and scalability".
+Example prompts: "Generate my resume for the JD in resources/job-descriptions/jd.txt", "Highlight AWS, Kubernetes, and leadership", "Use my profile and emphasize backend and scalability", "Generate an editable Word document I can edit".
 
-**CLI options** — `-i/--input` (content YAML path; default `my-content/resume_content.yaml`), `-o/--output` (output LaTeX path), `--tailor <path>`, `--tailor-url <url>`, `--no-tailor`, `--openai`, `--version`, `-v/--verbose`, `--max-fact-error-rate`. See `pipenv run python generate_resume.py --help`.
+**CLI options** — `-i/--input` (content YAML path; default `my-content/resume_content.yaml`), `-o/--output` (output LaTeX path), `-f/--format` (`pdf`, `docx`, or `both`), `--tailor <path>`, `--tailor-url <url>`, `--no-tailor`, `--openai`, `--version`, `-v/--verbose`, `--max-fact-error-rate`. See `pipenv run python generate_resume.py --help`.
 
 ---
 

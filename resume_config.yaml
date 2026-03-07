@@ -1,3 +1,9 @@
+# Optional: override header for Word (.docx) output. If omitted, header is extracted from resources/resume.tex.
+# personal_info:
+#   first_name: "Your"
+#   last_name: "Name"
+#   contact: "City, State | phone | email | linkedin.com/in/you | yoursite.com"
+
 fact_error:
   # Default maximum share of introduced facts allowed (0.0–1.0).
   # Used when no more specific context value is set.

@@ -22,7 +22,7 @@ DEFAULT_OUTPUT = PROJECT_ROOT / "resources" / "resume_sections.tex"
 def _get_tools(default_profile_path: Path, use_openai: bool = False):
     """Build LangChain tools that close over default_profile_path and use_openai."""
     import tailor
-    from generate_resume import compile_latex_to_pdf, render_yaml_to_latex
+    from generate_resume import compile_latex_to_pdf, render_yaml_to_docx, render_yaml_to_latex
 
     from langchain_core.tools import tool
 
@@ -68,13 +68,16 @@ def _get_tools(default_profile_path: Path, use_openai: bool = False):
         skills_to_highlight: Optional[str] = None,
         extra_instructions: Optional[str] = None,
         output_path: Optional[str] = None,
+        output_format: Optional[str] = None,
     ) -> str:
         """Generate a tailored resume from the user profile and optionally a job description.
-        Writes LaTeX to the output path, then compiles to PDF. Use this when the user wants to generate
-        or regenerate their resume. profile_path is required. jd_path is optional (file or URL). skills_to_highlight
-        can be a comma-separated list of skills to emphasize (e.g. 'AWS, Kubernetes, leadership').
-        extra_instructions can be any additional guidance (e.g. 'emphasize backend and scalability').
-        output_path defaults to resources/resume_sections.tex if not provided."""
+        Writes LaTeX to the output path, then compiles to PDF (unless output_format is docx).
+        Use this when the user wants to generate or regenerate their resume. profile_path is required.
+        jd_path is optional (file or URL). skills_to_highlight can be a comma-separated list of skills
+        to emphasize (e.g. 'AWS, Kubernetes, leadership'). extra_instructions can be any additional guidance
+        (e.g. 'emphasize backend and scalability'). output_path defaults to resources/resume_sections.tex
+        if not provided. output_format: 'pdf' (default), 'docx' (Word document), or 'both'. Use 'docx' when
+        the user asks for an editable document, Word document, or .docx format."""
         try:
             p_path = Path(profile_path)
             if not p_path.is_absolute():
@@ -91,6 +94,10 @@ def _get_tools(default_profile_path: Path, use_openai: bool = False):
             if skills_to_highlight and skills_to_highlight.strip():
                 skills_list = [s.strip() for s in skills_to_highlight.split(",") if s.strip()]
 
+            fmt = (output_format or "pdf").strip().lower()
+            if fmt not in ("pdf", "docx", "both"):
+                fmt = "pdf"
+
             out_path = Path(output_path) if output_path and output_path.strip() else DEFAULT_OUTPUT
             if not out_path.is_absolute():
                 out_path = PROJECT_ROOT / out_path
@@ -106,11 +113,28 @@ def _get_tools(default_profile_path: Path, use_openai: bool = False):
             )
             if yaml_str is None:
                 return "Error: Resume tailoring failed (LLM or validation error). Try again or check the profile."
-            render_yaml_to_latex(yaml_str, out_path)
-            pdf_path = compile_latex_to_pdf()
-            if pdf_path:
-                return f"Generated resume PDF at {pdf_path}"
-            return f"Generated LaTeX at {out_path}. (PDF compilation failed—ensure XeLaTeX is installed. Run 'make build' to compile manually.)"
+
+            results = []
+            if fmt in ("pdf", "both"):
+                render_yaml_to_latex(yaml_str, out_path)
+                pdf_path = compile_latex_to_pdf()
+                if pdf_path:
+                    results.append(f"Generated resume PDF at {pdf_path}")
+                elif fmt == "pdf":
+                    return f"Generated LaTeX at {out_path}. (PDF compilation failed—ensure XeLaTeX is installed. Run 'make build' to compile manually.)"
+                else:
+                    results.append(f"LaTeX at {out_path} (PDF compilation failed).")
+
+            if fmt in ("docx", "both"):
+                from datetime import datetime, timezone
+                output_dir = PROJECT_ROOT / "output"
+                output_dir.mkdir(parents=True, exist_ok=True)
+                timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+                docx_path = output_dir / f"resume-{timestamp}.docx"
+                render_yaml_to_docx(yaml_str, docx_path)
+                results.append(f"Generated Word document at {docx_path}")
+
+            return " ".join(results) if results else "No output generated."
         except Exception as e:
             return f"Error generating resume: {e}"
 
@@ -142,13 +166,15 @@ def _create_agent(use_openai: bool, default_profile: Path):
 You have access to these tools:
 - load_profile(path): Load the user's profile from a file path
 - load_jd(path_or_url): Load a job description from a file path or URL
-- generate_resume(profile_path, jd_path=None, skills_to_highlight=None, extra_instructions=None, output_path=None): Generate a tailored resume
+- generate_resume(profile_path, jd_path=None, skills_to_highlight=None, extra_instructions=None, output_path=None, output_format=None): Generate a tailored resume. output_format can be "pdf", "docx", or "both".
 
 When the user wants to generate a resume:
 1. Use their profile (default: my-content/user_profile.md unless they specify another path)
 2. Optionally use a job description if they provide one (file path or URL)
 3. If they mention specific skills to emphasize (e.g. "highlight AWS and Kubernetes"), pass them as skills_to_highlight (comma-separated)
 4. If they give other instructions (e.g. "emphasize backend", "focus on leadership"), pass them as extra_instructions
+
+When the user asks for an editable document, Word document, .docx format, or format they can edit, call generate_resume with output_format="docx". When they want both PDF and Word, use output_format="both". Default is output_format="pdf".
 
 IMPORTANT: When the user confirms they want to proceed (e.g. "yes", "proceed", "generate", "go ahead") and you have already loaded their profile and job description in this conversation, call generate_resume immediately. Do not ask for the same information again."""
     agent = create_agent(
