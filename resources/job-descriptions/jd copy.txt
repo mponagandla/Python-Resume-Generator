@@ -1,0 +1,173 @@
+Staff Software Engineer, Backend | Web Apps
+Remote - US; US
+Machinify is a leading healthcare intelligence company with expertise across the payment continuum, delivering unmatched value, transparency, and efficiency to health plan clients across the country. Deployed by over 85 health plans, including many of the top 20, and representing more than 270 million lives, Machinify brings together a fully configurable and content-rich, AI-powered platform along with best-in-class expertise. We’re constantly reimagining what’s possible in our industry, creating disruptively simple, powerfully clear ways to maximize financial outcomes and drive down healthcare costs.
+
+We're looking for skilled Senior or Staff Backend Engineer to join our growing engineering team!
+
+In this role, you will leverage your deep programming expertise to design and build scalable, reliable backend systems. The ideal candidate has strong experience in application system architecture and design, as well as proven leadership skills, whether through serving as a tech lead or guiding complex projects.
+
+You’ll have the opportunity to work on a platform that sits at the intersection of engineering, AI, modeling, and real-world decision automation. As a cross-functional high impact role, you’ll influence foundational technical decisions and collaborate with a world-class engineering team solving meaningful and complex problems!
+
+What You’ll Do
+
+Contribute to backend server-side development to ensure our application is extensible, scalable, and secure
+
+Recognize and prioritize between Customer deliverables & Tech debt to develop a sustainable software suite of products.
+
+Enjoy designing and architecting complex frameworks for applying ML techniques to large data volumes and simplifying labor-intensive processes
+
+Deliver resilient enterprise software solutions
+
+What You Bring
+
+10+ years of backend focused experience in the field of application programming and complex API development
+
+Strong working experience with Java or Scala
+
+Proven experience developing thoughtful backend system design and architecture with scalability in mind
+
+Additional Rust experience highly desired across greenfield projects!
+
+Experience reading and understanding complex enterprise-grade code, quickly contributing to it, and suggesting improvements.
+
+Working experience writing SQL queries
+
+Strong CS foundation (data structures, asynchronous programming) 
+
+Excellences in test writing discipline
+
+Critical thinking and problem solving skills working in a high growth environment
+
+Comfortable navigating ambiguity
+
+BS or MS in Computer Science (or equivalent experience)
+
+What We Offer 
+
+Work from anywhere in the US! Machinify is digital-first. 
+Top Medical/Dental/Vision offerings 
+FSA/HSA 
+Tuition reimbursement 
+Competitive salary, 401(k) with company match 
+Unlimited PTO 
+Additional health and wellness benefits and perks 
+Flexible and trusting environment where you’ll feel empowered to do your best work 
+The salary for this position is based on an array of factors unique to each candidate: Such as years and depth of experience, set skills, certifications, etc.  We are hiring for different levels, and our Recruiting team will let you know if you qualify for a different role/range. Salary is one component of the total compensation package, which includes meaningful equity, excellent healthcare, flexible time off, and other benefits and perks. 
+
+Pay range: $200,000-245,000
+
+Equal Employment Opportunity at Machinify
+ 
+We are committed to equal employment opportunity regardless of race, color, ancestry, religion, sex, national origin, sexual orientation, age, citizenship, marital status, disability, gender, gender identity or expression, or veteran status. We are proud to be an equal opportunity workplace. Machinify is an employment at will employer. We participate in E-Verify as required by applicable law. In accordance with applicable state laws, we do not inquire about salary history during the recruitment process. If you require a reasonable accommodation to complete any part of the application or recruitment process, please let our recruiters know. See our Candidate Privacy Notice at: https://www.machinify.com/candidate-privacy-notice/
+Apply for this job
+*
+indicates a required field
+First Name*
+
+Last Name*
+
+Preferred First Name
+
+Email*
+
+Phone
+Country*
+
+
+
+Phone*
+
+Resume/CV*
+Attach
+Enter manually
+Accepted file types: pdf, doc, docx, txt, rtf
+LinkedIn Profile
+
+Additional links (optional)
+
+Share any relevant links you'd like us to review here, such as your GitHub, personal website, online portfolio, or other professional profiles.
+
+Did an employee refer you to apply? *
+Select...
+
+
+
+If yes, please enter the name of the person who referred you.
+
+Are you legally authorized to work in the United States for any employer?*
+Select...
+
+
+
+Do you or will you require sponsorship for a US employment visa?*
+Select...
+
+
+
+I currently reside in the United States.*
+Select...
+
+
+
+Voluntary Self-Identification
+For government reporting purposes, we ask candidates to respond to the below self-identification survey. Completion of the form is entirely voluntary. Whatever your decision, it will not be considered in the hiring process or thereafter. Any information that you do provide will be recorded and maintained in a confidential file.
+
+As set forth in Machinify’s Equal Employment Opportunity policy, we do not discriminate on the basis of any protected group status under any applicable law.
+Gender
+Select...
+
+
+Are you Hispanic/Latino?
+Select...
+
+
+Race & Ethnicity Definitions
+If you believe you belong to any of the categories of protected veterans listed below, please indicate by making the appropriate selection. As a government contractor subject to the Vietnam Era Veterans Readjustment Assistance Act (VEVRAA), we request this information in order to measure the effectiveness of the outreach and positive recruitment efforts we undertake pursuant to VEVRAA. Classification of protected categories is as follows:
+
+A "disabled veteran" is one of the following: a veteran of the U.S. military, ground, naval or air service who is entitled to compensation (or who but for the receipt of military retired pay would be entitled to compensation) under laws administered by the Secretary of Veterans Affairs; or a person who was discharged or released from active duty because of a service-connected disability.
+
+A "recently separated veteran" means any veteran during the three-year period beginning on the date of such veteran's discharge or release from active duty in the U.S. military, ground, naval, or air service.
+
+An "active duty wartime or campaign badge veteran" means a veteran who served on active duty in the U.S. military, ground, naval or air service during a war, or in a campaign or expedition for which a campaign badge has been authorized under the laws administered by the Department of Defense.
+
+An "Armed forces service medal veteran" means a veteran who, while serving on active duty in the U.S. military, ground, naval or air service, participated in a United States military operation for which an Armed Forces service medal was awarded pursuant to Executive Order 12985.
+Veteran Status
+Select...
+
+
+Voluntary Self-Identification of Disability
+Form CC-305
+Page 1 of 1
+OMB Control Number 1250-0005
+Expires 04/30/2026
+
+Why are you being asked to complete this form?
+We are a federal contractor or subcontractor. The law requires us to provide equal employment opportunity to qualified people with disabilities. We have a goal of having at least 7% of our workers as people with disabilities. The law says we must measure our progress towards this goal. To do this, we must ask applicants and employees if they have a disability or have ever had one. People can become disabled, so we need to ask this question at least every five years.
+
+Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at www.dol.gov/ofccp.
+
+How do you know if you have a disability?
+A disability is a condition that substantially limits one or more of your “major life activities.” If you have or have ever had such a condition, you are a person with a disability. Disabilities include, but are not limited to:
+
+Alcohol or other substance use disorder (not currently using drugs illegally)
+Autoimmune disorder, for example, lupus, fibromyalgia, rheumatoid arthritis, HIV/AIDS
+Blind or low vision
+Cancer (past or present)
+Cardiovascular or heart disease
+Celiac disease
+Cerebral palsy
+Deaf or serious difficulty hearing
+Diabetes
+Disfigurement, for example, disfigurement caused by burns, wounds, accidents, or congenital disorders
+Epilepsy or other seizure disorder
+Gastrointestinal disorders, for example, Crohn's Disease, irritable bowel syndrome
+Intellectual or developmental disability
+Mental health conditions, for example, depression, bipolar disorder, anxiety disorder, schizophrenia, PTSD
+Missing limbs or partially missing limbs
+Mobility impairment, benefiting from the use of a wheelchair, scooter, walker, leg brace(s) and/or other supports
+Nervous system condition, for example, migraine headaches, Parkinson’s disease, multiple sclerosis (MS)
+Neurodivergence, for example, attention-deficit/hyperactivity disorder (ADHD), autism spectrum disorder, dyslexia, dyspraxia, other learning disabilities
+Partial or complete paralysis (any cause)
+Pulmonary or respiratory conditions, for example, tuberculosis, asthma, emphysema
+Short stature (dwarfism)
+Traumatic brain injury

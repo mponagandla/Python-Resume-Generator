@@ -19,6 +19,7 @@ The tool reads resume content from YAML (summary, skills, experience, projects),
 - **Awesome-CV layout** — Professional, ATS-friendly resume format
 - **Job-specific variants** — Maintain multiple YAML versions for different roles
 - **AI tailoring (optional)** — Generate a resume tailored to a job description. With a **user profile** (`my-content/user_profile.md`), the LLM builds resume content from that profile only. Without it, tailoring rephrases/emphasizes your existing YAML; the LLM never adds new experience or skills
+- **Chat agent (optional)** — Interactive terminal chat with an agent that can load your profile, load job descriptions, and generate tailored resumes with skills to highlight and custom instructions
 - **Simple build** — One command to generate and compile
 
 ---
@@ -107,6 +108,16 @@ pipenv run python generate_resume.py --tailor-url "https://example.com/job-posti
 pipenv run python generate_resume.py --tailor jd.txt --openai   # use OpenAI instead of Ollama
 ```
 
+**Chat mode** — Interact with an agent that plans and triggers resume generation. The agent can load your profile, load job descriptions, and generate tailored resumes with optional skills to highlight and extra instructions:
+
+```bash
+pipenv run python generate_resume.py chat
+pipenv run python generate_resume.py chat --openai          # use OpenAI for the agent
+pipenv run python generate_resume.py chat --profile path/to/profile.md
+```
+
+Example prompts: "Generate my resume for the JD in resources/job-descriptions/jd.txt", "Highlight AWS, Kubernetes, and leadership", "Use my profile and emphasize backend and scalability".
+
 **CLI options** — `-i/--input` (content YAML path; default `my-content/resume_content.yaml`), `-o/--output` (output LaTeX path), `--tailor <path>`, `--tailor-url <url>`, `--no-tailor`, `--openai`, `--version`, `-v/--verbose`, `--max-fact-error-rate`. See `pipenv run python generate_resume.py --help`.
 
 ---
@@ -142,7 +153,8 @@ You might want a stricter threshold for **profile-based tailoring** (to prevent 
 ## Project Structure
 
 ```
-├── generate_resume.py          # CLI entry point
+├── generate_resume.py          # CLI entry point (generate, chat)
+├── resume_agent.py             # Chat agent (LangChain) for interactive resume generation
 ├── tailor.py                   # AI tailoring (Ollama / OpenAI)
 ├── Makefile                    # Build targets (generate, build, build-tailored, init-profile, clean)
 ├── Pipfile                     # Python dependencies

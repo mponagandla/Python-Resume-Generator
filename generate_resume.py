@@ -24,6 +24,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import argparse
 import logging
+import shutil
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -202,6 +204,65 @@ def render_projects(projects: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def compile_latex_to_pdf(resources_dir: Path | None = None) -> Path | None:
+    """
+    Compile resume.tex to PDF using xelatex. Returns the path to the generated PDF,
+    or None if compilation fails (e.g. xelatex not installed).
+    """
+    resources_dir = resources_dir or RESOURCES_DIR
+    resume_tex = resources_dir / "resume.tex"
+    if not resume_tex.exists():
+        return None
+    try:
+        subprocess.run(
+            ["xelatex", "-interaction=batchmode", "resume.tex"],
+            cwd=resources_dir,
+            check=True,
+            capture_output=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+    pdf_path = resources_dir / "resume.pdf"
+    if not pdf_path.exists():
+        return None
+    # Copy to output/ with timestamp (like Makefile)
+    output_dir = PROJECT_ROOT / "output"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    output_pdf = output_dir / f"resume-{timestamp}.pdf"
+    shutil.copy2(pdf_path, output_pdf)
+    return output_pdf
+
+
+def render_yaml_to_latex(yaml_str_or_data: str | dict, output_path: Path) -> None:
+    """
+    Render resume YAML (string or dict) to LaTeX and write to output_path.
+    Used by main() and by the chat agent's generate_resume tool.
+    """
+    if isinstance(yaml_str_or_data, str):
+        data = yaml.safe_load(yaml_str_or_data)
+    else:
+        data = yaml_str_or_data
+    if not data:
+        raise ValueError("Content is empty.")
+    sections = []
+    if "summary" in data:
+        sections.append(render_summary(data["summary"]))
+    if "skills" in data:
+        sections.append(render_skills(data["skills"]))
+    if "experience" in data:
+        sections.append(render_experience(data["experience"]))
+    if "projects" in data:
+        sections.append(render_projects(data["projects"]))
+    output = "\n".join(sections)
+    output_path = output_path.resolve()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    gen_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(f"% Generated: {gen_time}\n")
+        f.write(output)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Generate resume_sections.tex from resume content YAML. Optionally tailor content to a job description using an LLM."
@@ -321,18 +382,9 @@ def main() -> None:
         print("Error: Content file is empty.", file=sys.stderr)
         sys.exit(1)
 
-    sections = []
-    if "summary" in data:
-        sections.append(render_summary(data["summary"]))
-    if "skills" in data:
-        sections.append(render_skills(data["skills"]))
-    if "experience" in data:
-        sections.append(render_experience(data["experience"]))
-    if "projects" in data:
-        sections.append(render_projects(data["projects"]))
-
-    output = "\n".join(sections)
     out_path = args.output.resolve()
+    render_yaml_to_latex(data, out_path)
+    print(f"Generated {out_path}")
     out_path.parent.mkdir(parents=True, exist_ok=True)
     gen_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     # Prepend a generation timestamp so you can verify the file is updated on each run.
@@ -344,4 +396,9 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1 and sys.argv[1] == "chat":
+        sys.argv = [sys.argv[0]] + sys.argv[2:]
+        from resume_agent import main as chat_main
+        chat_main()
+    else:
+        main()
