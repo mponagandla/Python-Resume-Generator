@@ -1,43 +1,40 @@
-Job Description:
+At Happy Returns, we’re transforming the most frustrating part of online shopping — returns — into a fast, easy, and delightful experience. Our technology powers seamless returns and exchanges for leading retailers and millions of shoppers.
 
-At Oracle Cloud Infrastructure (OCI), we build the future of the cloud for Enterprises as a diverse team of fellow creators and inventors. We act with the speed and attitude of a start-up, with the scale and customer focus of the leading enterprise software company in the world.
- 
-The Oracle Cloud Infrastructure (OCI) team can allow you to build and operate a massive scale, integrated cloud services in a broadly distributed, multi-tenant cloud environment.  OCI is committed to providing the best in cloud products that meet the needs of our customers who are tackling some of the world’s biggest challenges. We offer unique opportunities for innovative, hands-on engineers with the expertise and passion to solve complex problems in distributed, highly available services and virtualized infrastructure. Our engineers have a significant technical and business impact at every level, designing and building innovative new systems to power our customers’ business-critical applications.  
-We are reimagining what's possible with a true cloud-native database to provide unparalleled performance and durability with our new large-scale distributed services and storage backend. Our services expose highly available, high-performance storage volumes and backups to our elastic compute customers.
- 
-We’re looking for hands-on engineers with expertise and passion for solving complex problems in distributed database systems, storage infrastructure, transaction processing, and highly available services. If this is you, at Oracle, you can design and build innovative new systems from the ground up. These are exciting times in our space - we are growing fast, still at an early stage, and working on 
-Responsibilities
+As a Software Engineer, you’ll help build the systems that make returns effortless. You’ll work alongside experienced engineers, learn modern tools and frameworks, and contribute directly to projects that improve reliability, performance, and customer satisfaction. You’ll thrive here if you’re curious, adaptable, and excited to grow in an environment that’s always evolving.
 
-As a member of the software engineering division, you will take an active role in defining and evolving standard software engineering practices, architecture and procedures. You will be responsible for defining, developing, designing, and debugging Cloud Scale Distributed Systems and Services, and you will also provide mentorship for other engineers. Work is novel and complex, involving the application of advanced technical skills in an area of specialization. You will be leading contributor individually in the area and as a team member, providing direction and mentoring to others. BS or MS degree or equivalent experience relevant to functional area. 
- 
-You will own software development of significant features in Oracle Cloud's Database Service offerings. You should be comfortable with development in Java/Python/Terraform and be willing to learn new languages as needed. You should value simplicity and scale, work well in a collaborative, agile environment, and be excited to learn.
- 
-Qualifications
+Your day to day
 
-Disclaimer:
+Take ownership of the successful implementation and delivery of new features and projects using a variety of modern languages and frameworks such as Golang, TypeScript, React, and PostgreSQL
+Actively participate in system architecture discussions and technical design reviews to ensure the scalability, reliability, and security of the Happy Returns system
+Enforce clean code and excellent coding practices by conducting thoughtful code reviews
+Learn from senior engineers, contribute to knowledge-sharing sessions, and continuously expand your technical and problem-solving skills as you grow into more complex projects
+Collaborate with Product Managers to translate business goals into technical outcomes
+Use AI-assisted development tools to accelerate coding, debugging, testing, and documentation workflows.
+Support the health and stability of our systems through thoughtful testing, monitoring, and debugging so we can achieve our mission of making returns beautiful for Shoppers, Retailers, and the Planet
 
-Certain US customer or client-facing roles may be required to comply with applicable requirements, such as immunization and occupational health mandates.
+ The ideal candidate will have.... 
 
-Range and benefit information provided in this posting are specific to the stated locations only
+1-3 years of experience in full stack web application development
+Experience designing, implementing, and testing REST APIs
+The ability to efficiently ship clean, maintainable, and well-tested code
+A strong interest in joining a highly collaborative environment and working daily with Product Managers, DevOps, and QA Engineers
+You’re curious and adaptable, always ready to explore new technologies, and introduce tools that make the team more effective.
+A self-starter mindset with the ability to learn independently and thrive in a fully remote work environment
 
-US: Hiring Range in USD from: $96,800 to $223,400 per annum. May be eligible for bonus and equity.
+Bonus points if you have....
 
-Oracle maintains broad salary ranges for its roles in order to account for variations in knowledge, skills, experience, market conditions and locations, as well as reflect Oracle’s differing products, industries and lines of business.
-Candidates are typically placed into the range based on the preceding factors as well as internal peer equity.
+Experience with server-side languages such as Go or Python
+Proficiency in a modern JavaScript framework such as React
+Familiarity with database technology such as PostgreSQL, and Dynamo DB.
+Experience with Docker, Kubernetes, and AWS
+Interest in e-commerce, logistics, and/or sustainability 
 
-Oracle US offers a comprehensive benefits package which includes the following:
-1. Medical, dental, and vision insurance, including expert medical opinion
-2. Short term disability and long term disability
-3. Life insurance and AD&D
-4. Supplemental life insurance (Employee/Spouse/Child)
-5. Health care and dependent care Flexible Spending Accounts
-6. Pre-tax commuter and parking benefits
-7. 401(k) Savings and Investment Plan with company match
-8. Paid time off: Flexible Vacation is provided to all eligible employees assigned to a salaried (non-overtime eligible) position. Accrued Vacation is provided to all other employees eligible for vacation benefits. For employees working at least 35 hours per week, the vacation accrual rate is 13 days annually for the first three years of employment and 18 days annually for subsequent years of employment. Vacation accrual is prorated for employees working between 20 and 34 hours per week. Employees working fewer than 20 hours per week are not eligible for vacation.
-9. 11 paid holidays
-10. Paid sick leave: 72 hours of paid sick leave upon date of hire. Refreshes each calendar year. Unused balance will carry over each year up to a maximum cap of 112 hours.
-11. Paid parental leave
-12. Adoption assistance
-13. Employee Stock Purchase Plan
-14. Financial planning and group legal
-15. Voluntary benefits including auto, homeowner and pet insurance
+This is a fully remote position and is not limited to candidates located in Georgia
+
+ EEO Statement 
+
+Integrated into our shared values is Happy Returns’ commitment to diversity. Happy Returns is committed to being a globally inclusive company where all people are treated fairly, recognized for their individuality, promoted based on performance and encouraged to strive to reach their full potential. We believe in understanding and respecting differences among all people. This concept encompasses but is not limited to human differences with regard to race, ethnicity, religion, gender, culture and physical ability. Every individual at Happy Return has an ongoing responsibility to respect and support a globally diverse environment.
+
+Visa Sponsorship
+
+We do not offer Visa sponsorship or transfer for this role.
