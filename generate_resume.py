@@ -130,6 +130,7 @@ def render_entry(
     bullets: list[str],
     *,
     raw_position: bool = False,
+    tight_bullets: bool = False,
 ) -> str:
     """Render a single cventry (experience or project)."""
     pos_text = position if raw_position else escape_latex(position)
@@ -140,6 +141,8 @@ def render_entry(
     # cventry: position, title, location, date, description
     bullet_lines = [f"\\item {escape_latex(b)}" for b in bullets]
     items_block = "\\begin{cvitems}\n" + "\n".join(bullet_lines) + "\n\\end{cvitems}"
+    if tight_bullets:
+        items_block = "\\vspace{-3mm}\n" + items_block
     return f"""\\cventry
 {{{pos_text}}}
 {{{org_text}}}
@@ -200,6 +203,7 @@ def render_projects(projects: list[dict]) -> str:
                 location=entry.get("location", ""),
                 bullets=bullets,
                 raw_position=entry.get("raw_position", False),
+                tight_bullets=True,
             )
         )
     return "\n".join(lines)
@@ -390,7 +394,6 @@ def render_yaml_to_docx(yaml_str_or_data: str | dict, output_path: Path) -> Path
         run = p.add_run(contact)
         run.font.size = Pt(8)
         run.font.name = font_name
-        run.font.all_caps = True
         p.paragraph_format.space_after = Pt(2)
 
     def add_section_heading(title: str) -> None:

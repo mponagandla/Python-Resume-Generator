@@ -17,11 +17,15 @@ build-docx:
 
 # Tailor resume to a job description then build.
 # Usage: make build-tailored JOB_DESC=path/to/jd.txt
+#        make build-tailored JOB_DESC=https://example.com/job-posting
 # Word output: make build-tailored JOB_DESC=jd.txt FORMAT=docx
 # Use OpenAI: make build-tailored JOB_DESC=misc/job-descriptions/jd.txt OPENAI=1
 build-tailored:
 	@if [ -z "$(JOB_DESC)" ]; then echo "Error: JOB_DESC required. Example: make build-tailored JOB_DESC=misc/job-descriptions/jd.txt"; exit 1; fi
-	pipenv run python generate_resume.py --tailor "$(JOB_DESC)" $(if $(OPENAI),--openai,) $(if $(FORMAT),--format $(FORMAT),)
+	@case "$(JOB_DESC)" in http://*|https://*) \
+		pipenv run python generate_resume.py --tailor-url "$(JOB_DESC)" $(if $(OPENAI),--openai,) $(if $(FORMAT),--format $(FORMAT),);; \
+	*) pipenv run python generate_resume.py --tailor "$(JOB_DESC)" $(if $(OPENAI),--openai,) $(if $(FORMAT),--format $(FORMAT),);; \
+	esac
 	@if [ "$(FORMAT)" != "docx" ]; then \
 		cd resources && xelatex -interaction=batchmode resume.tex; \
 		timestamp=$$(date +%Y%m%d-%H%M%S); \

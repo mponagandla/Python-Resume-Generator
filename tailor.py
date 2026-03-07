@@ -718,12 +718,30 @@ def _get_max_fact_error_rate(
 
 
 def fetch_job_description(url: str, verbose: bool = False) -> str:
-    """Fetch job description text from URL. Returns raw text (no parsing)."""
+    """Fetch job description text from a public URL. Extracts readable text from HTML pages."""
     if verbose:
         logger.info("Fetching job description from %s", url)
-    resp = requests.get(url, timeout=30)
+    headers = {
+        "User-Agent": "Mozilla/5.0 (compatible; ResumeGenerator/1.0; +https://github.com/resume-generator)",
+    }
+    resp = requests.get(url, timeout=30, headers=headers)
     resp.raise_for_status()
-    return resp.text
+    content_type = (resp.headers.get("Content-Type") or "").lower()
+    text = resp.text
+    if "html" in content_type or text.strip().lower().startswith("<!doctype") or text.strip().startswith("<html"):
+        try:
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(text, "html.parser")
+            for tag in soup(["script", "style", "nav", "header", "footer"]):
+                tag.decompose()
+            body = soup.find("body") or soup
+            extracted = body.get_text(separator="\n", strip=True)
+            if extracted and len(extracted) > 100:
+                return extracted
+        except Exception as e:
+            if verbose:
+                logger.warning("HTML extraction failed, using raw content: %s", e)
+    return text
 
 
 def load_job_description_from_file(path: Path) -> str:
