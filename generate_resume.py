@@ -130,6 +130,8 @@ def render_entry(
     bullets: list[str],
     *,
     raw_position: bool = False,
+    tight_bullets: bool = False,
+    space_before_bullets: str = "",
 ) -> str:
     """Render a single cventry (experience or project)."""
     pos_text = position if raw_position else escape_latex(position)
@@ -140,6 +142,10 @@ def render_entry(
     # cventry: position, title, location, date, description
     bullet_lines = [f"\\item {escape_latex(b)}" for b in bullets]
     items_block = "\\begin{cvitems}\n" + "\n".join(bullet_lines) + "\n\\end{cvitems}"
+    if tight_bullets:
+        items_block = "\\vspace{-3mm}\n" + items_block
+    elif space_before_bullets:
+        items_block = f"\\vspace{{{space_before_bullets}}}\n" + items_block
     return f"""\\cventry
 {{{pos_text}}}
 {{{org_text}}}
@@ -185,7 +191,18 @@ def render_projects(projects: list[dict]) -> str:
     ]
     for entry in projects:
         # LLM may output "name" instead of "position" for projects; accept both.
-        position = entry.get("position") or entry.get("name") or ""
+        position = (entry.get("position") or entry.get("name") or "").strip()
+        organization = (entry.get("organization") or "").strip()
+        # Fix malformed projects: if position looks like "Personal Project 2023" and organization
+        # has the real project name, use organization as the single project line.
+        if position and organization:
+            pos_lower = position.lower()
+            if (
+                "personal project" in pos_lower
+                or (pos_lower.startswith("project") and any(c.isdigit() for c in position))
+            ):
+                position = organization
+        # Projects display as one line (project name) then bullets; no org/date/location line.
         bullets = entry.get("bullets")
         if bullets is None and "description" in entry:
             d = entry["description"]
@@ -195,9 +212,9 @@ def render_projects(projects: list[dict]) -> str:
         lines.append(
             render_entry(
                 position=position,
-                organization=entry.get("organization", ""),
-                date=entry.get("date", ""),
-                location=entry.get("location", ""),
+                organization="",
+                date="",
+                location="",
                 bullets=bullets,
                 raw_position=entry.get("raw_position", False),
             )
@@ -390,7 +407,6 @@ def render_yaml_to_docx(yaml_str_or_data: str | dict, output_path: Path) -> Path
         run = p.add_run(contact)
         run.font.size = Pt(8)
         run.font.name = font_name
-        run.font.all_caps = True
         p.paragraph_format.space_after = Pt(2)
 
     def add_section_heading(title: str) -> None:
@@ -519,7 +535,15 @@ def render_yaml_to_docx(yaml_str_or_data: str | dict, output_path: Path) -> Path
     if "projects" in data:
         add_section_heading("Projects")
         for entry in data["projects"]:
-            position = entry.get("position") or entry.get("name") or ""
+            position = (entry.get("position") or entry.get("name") or "").strip()
+            organization = (entry.get("organization") or "").strip()
+            if position and organization:
+                pos_lower = position.lower()
+                if (
+                    "personal project" in pos_lower
+                    or (pos_lower.startswith("project") and any(c.isdigit() for c in position))
+                ):
+                    position = organization
             bullets = entry.get("bullets")
             if bullets is None and "description" in entry:
                 d = entry["description"]
@@ -528,9 +552,9 @@ def render_yaml_to_docx(yaml_str_or_data: str | dict, output_path: Path) -> Path
                 bullets = []
             add_entry(
                 position=position,
-                organization=entry.get("organization", ""),
-                date=entry.get("date", ""),
-                location=entry.get("location", ""),
+                organization="",
+                date="",
+                location="",
                 bullets=bullets,
             )
 

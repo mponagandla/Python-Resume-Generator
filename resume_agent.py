@@ -170,7 +170,7 @@ You have access to these tools:
 
 When the user wants to generate a resume:
 1. Use their profile (default: my-content/user_profile.md unless they specify another path)
-2. Optionally use a job description if they provide one (file path or URL)
+2. Optionally use a job description if they provide one—either a file path or a public URL (e.g. https://example.com/job-posting). Use load_jd with the URL to fetch it, or pass the URL directly to generate_resume as jd_path.
 3. If they mention specific skills to emphasize (e.g. "highlight AWS and Kubernetes"), pass them as skills_to_highlight (comma-separated)
 4. If they give other instructions (e.g. "emphasize backend", "focus on leadership"), pass them as extra_instructions
 
