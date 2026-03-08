@@ -64,6 +64,11 @@ FORMAT REQUIREMENTS:
 - Keep each skill category’s items string short enough to fit one PDF line (~50–60 characters).
 - Bullets should be detailed enough to convey what you did, how, and what the result was; one or two sentences per bullet is fine.
 
+PROJECTS FORMAT (IMPORTANT):
+- Each project must be a mapping with keys position and bullets. Use position: "ProjectName" (e.g. position: DESiROOMY).
+- Do NOT use "Personal Project", "Project", a year (e.g. 2023), or "Remote" as the position value. Do NOT put the project name in organization.
+- Leave organization, date, and location empty for projects. Example: "- position: DESiROOMY\n  bullets:\n  - ..."
+
 SKILLS AND TECHNOLOGIES (IMPORTANT):
 - The skills section MUST include all major technologies, frameworks, and languages that appear in the profile (e.g. Next.js, TypeScript, GraphQL, React, Node.js, Java, Spring Boot, AWS, Kubernetes). Do not omit profile-mentioned technologies; you may reorder or group by relevance to the job description but must include them.
 - In experience bullets: include technologies, scope, and outcomes; add enough detail that a reader understands the responsibility and impact.
@@ -139,6 +144,11 @@ FORMAT RULES:
 - Avoid multi-sentence bullets.
 - Avoid filler adjectives.
 - Avoid generic claims not supported by profile content.
+
+PROJECTS FORMAT (IMPORTANT):
+- Each project must be a mapping with keys position and bullets. Use position: "ProjectName" (e.g. position: DESiROOMY).
+- Do NOT use "Personal Project", "Project", a year (e.g. 2023), or "Remote" as the position value. Do NOT put the project name in organization.
+- Leave organization, date, and location empty for projects. Example: "- position: DESiROOMY\n  bullets:\n  - ..."
 
 SKILLS AND TECHNOLOGIES (IMPORTANT):
 - The skills section MUST include all major technologies, frameworks, and languages that appear in the profile (e.g. Next.js, TypeScript, GraphQL, React, Node.js, Java, Spring Boot, AWS, Kubernetes). Do not omit profile-mentioned technologies; you may reorder or group by relevance to the job description but must include them.
@@ -228,7 +238,7 @@ USER_PROMPT_PROFILE_NO_JD_TEMPLATE = """User profile (everything the user has pr
 Produce resume YAML from this profile. Use ONLY the facts above; do not add any new information. Include in the skills section all key technologies from the profile and mention them in experience bullets where relevant. For experience and projects, write detailed bullets: include what was done, technologies or methods used, and outcome or impact when present in the profile. Each bullet can be one or two sentences so that scope and results are clear. Output nothing but the YAML (you may wrap it in a ```yaml ... ``` code block)."""
 
 # Rewrite-only prompt: fix specific experience/project entries that contain facts not in the source.
-SYSTEM_PROMPT_REWRITE = """You are a resume editor. Your task is to rewrite only the given experience or project entries so they use ONLY facts from the source of truth below. Do not add new companies, job titles, or projects. Output valid YAML with keys "experience" and/or "projects" containing only the corrected entries in the same order as given. Preserve raw_position: true for project entries that need LaTeX in the position field."""
+SYSTEM_PROMPT_REWRITE = """You are a resume editor. Your task is to rewrite only the given experience or project entries so they use ONLY facts from the source of truth below. Do not add new companies, job titles, or projects. Output valid YAML with keys "experience" and/or "projects" containing only the corrected entries in the same order as given. Preserve raw_position: true for project entries that need LaTeX in the position field. For projects: use position: \"ProjectName\" (e.g. position: DESiROOMY); leave organization, date, and location empty. Do not use \"Personal Project\", year, or \"Remote\" as the position value."""
 
 USER_PROMPT_REWRITE_TEMPLATE = """Source of truth (only these facts may appear):
 ```
@@ -331,21 +341,55 @@ def _extract_yaml_from_response(text: str) -> str:
 
 
 def _normalize_llm_yaml(raw: str) -> str:
-    """Fix common LLM YAML mistakes before parsing. E.g. 'position: raw_position: X' -> valid."""
-    # LLM sometimes outputs invalid 'position: raw_position: "X"' or 'position: raw_position: X' (mapping values not allowed).
-    # Normalize to separate keys with correct indentation for list items.
+    """Fix common LLM YAML mistakes before parsing."""
+    lines = raw.split("\n")
+    out = []
+    in_projects = False
+    project_indent = 0
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        # Detect projects section
+        if re.match(r"^projects\s*:", line):
+            in_projects = True
+            project_indent = len(line) - len(line.lstrip()) + 2
+            out.append(line)
+            i += 1
+            continue
+        if in_projects:
+            stripped = line.lstrip()
+            indent = len(line) - len(stripped)
+            # End of projects: next top-level key or EOF
+            if stripped and not line.startswith(" ") and ":" in stripped:
+                in_projects = False
+            # Fix: "- ProjectName" followed by "  bullets:" -> "- position: ProjectName" (only if no position: key yet)
+            elif (
+                stripped.startswith("- ")
+                and "position:" not in stripped
+                and ":" not in stripped.split()[0]
+            ):
+                rest = stripped[2:].strip()
+                if rest and i + 1 < len(lines):
+                    next_line = lines[i + 1]
+                    next_stripped = next_line.lstrip()
+                    if next_stripped.startswith("bullets:"):
+                        out.append(line[:indent] + f"- position: {rest}")
+                        i += 1
+                        continue
+        out.append(line)
+        i += 1
 
-    lines = []
-    for line in raw.split("\n"):
+    lines = out
+    result = []
+    for line in lines:
         if "position:" in line and "raw_position:" in line and "position: raw_position:" in line:
-            # Match "position: raw_position: value" or "position: raw_position: "value""
             quoted = re.match(r"^(\s*)(.*?\bposition:\s*)raw_position:\s*\"([^\"]*)\"(.*)$", line)
             unquoted = re.match(r"^(\s*)(.*?\bposition:\s*)raw_position:\s+(.+)$", line)
             if quoted:
                 prefix, before, value, suffix = quoted.group(1, 2, 3, 4)
-                indent = prefix + "  "  # key indent for list item
-                lines.append(f"{prefix}{before}\"{value}\"{suffix}")
-                lines.append(f"{indent}raw_position: true")
+                indent = prefix + "  "
+                result.append(f"{prefix}{before}\"{value}\"{suffix}")
+                result.append(f"{indent}raw_position: true")
                 continue
             if unquoted:
                 prefix, before, value = unquoted.group(1, 2, 3)
@@ -353,11 +397,11 @@ def _normalize_llm_yaml(raw: str) -> str:
                 if '"' in value:
                     value = value.replace("\\", "\\\\").replace('"', '\\"')
                 indent = prefix + "  "
-                lines.append(f'{prefix}{before}"{value}"')
-                lines.append(f"{indent}raw_position: true")
+                result.append(f'{prefix}{before}"{value}"')
+                result.append(f"{indent}raw_position: true")
                 continue
-        lines.append(line)
-    return "\n".join(lines)
+        result.append(line)
+    return "\n".join(result)
 
 
 def _parse_tailored_yaml(raw: str) -> Optional[dict]:
