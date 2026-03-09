@@ -714,6 +714,15 @@
             "markers": "python_version >= '3.8'",
             "version": "==26.0"
         },
+        "prompt-toolkit": {
+            "hashes": [
+                "sha256:28cde192929c8e7321de85de1ddbe736f1375148b02f2e17edd840042b1be855",
+                "sha256:9aac639a3bbd33284347de5ad8d68ecc044b91a762dc39b7c21095fcd6a19955"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.8'",
+            "version": "==3.0.52"
+        },
         "pydantic": {
             "hashes": [
                 "sha256:4d351024c75c0f085a9febbb665ce8c0c6ec5d30e903bdb6394b7ede26aebb49",
@@ -1221,6 +1230,14 @@
             ],
             "markers": "python_version >= '3.9'",
             "version": "==0.14.1"
+        },
+        "wcwidth": {
+            "hashes": [
+                "sha256:1a3a1e510b553315f8e146c54764f4fb6264ffad731b3d78088cdb1478ffbdad",
+                "sha256:cdc4e4262d6ef9a1a57e018384cbeb1208d8abbc64176027e2c2455c81313159"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==0.6.0"
         },
         "xxhash": {
             "hashes": [

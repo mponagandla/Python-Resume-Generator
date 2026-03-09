@@ -209,6 +209,13 @@ def render_projects(projects: list[dict]) -> str:
             bullets = [d] if isinstance(d, str) else list(d) if isinstance(d, (list, tuple)) else []
         if bullets is None:
             bullets = []
+        # Hyperlink project title when url is provided
+        raw_pos = entry.get("raw_position", False)
+        project_url = entry.get("url", "").strip()
+        if project_url and position:
+            pos_text = escape_latex(position)
+            position = f"\\href{{{project_url}}}{{{pos_text}}}"
+            raw_pos = True
         lines.append(
             render_entry(
                 position=position,
@@ -216,7 +223,7 @@ def render_projects(projects: list[dict]) -> str:
                 date="",
                 location="",
                 bullets=bullets,
-                raw_position=entry.get("raw_position", False),
+                raw_position=raw_pos,
             )
         )
     return "\n".join(lines)
