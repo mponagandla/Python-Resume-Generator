@@ -11,6 +11,7 @@ Copyright (C) 2025  Manoj Ponagandla
 
 import os
 import sys
+import threading
 from pathlib import Path
 from typing import Any, Optional
 
@@ -364,6 +365,17 @@ def _read_multiline_input(prompt: str = "You: ") -> str:
     return session.prompt(prompt)
 
 
+def _thinking_spinner(stop_event: threading.Event, message: str = "Thinking...") -> None:
+    """Run a simple spinner in a loop until stop_event is set. Used from a daemon thread."""
+    frames = ["|", "/", "-", "\\"]
+    idx = 0
+    while not stop_event.is_set():
+        frame = frames[idx % len(frames)]
+        print(f"\r  {message}  {frame}", end="", flush=True)
+        idx += 1
+        stop_event.wait(timeout=0.12)
+
+
 def run_chat(use_openai: bool = False, default_profile: Optional[Path] = None) -> None:
     """Run the chat REPL."""
     profile = default_profile or DEFAULT_PROFILE
@@ -385,13 +397,32 @@ def run_chat(use_openai: bool = False, default_profile: Optional[Path] = None) -
         if user_input.lower() in ("exit", "quit"):
             print("Goodbye.", flush=True)
             break
+        stop_event = threading.Event()
+        spinner_thread = None
         try:
             messages.append({"role": "user", "content": user_input})
-            result = agent.invoke({"messages": messages})
-            messages = result.get("messages", messages)
-            response = _extract_final_response(result)
-            print(f"\nAssistant: {response}\n", flush=True)
+            if sys.stdout.isatty():
+                spinner_thread = threading.Thread(
+                    target=_thinking_spinner,
+                    args=(stop_event,),
+                    daemon=True,
+                )
+                spinner_thread.start()
+            try:
+                result = agent.invoke({"messages": messages})
+                messages = result.get("messages", messages)
+                response = _extract_final_response(result)
+                print(f"\nAssistant: {response}\n", flush=True)
+            finally:
+                if spinner_thread is not None:
+                    stop_event.set()
+                    spinner_thread.join(timeout=0.5)
+                    print(f"\r{' ' * (len('  Thinking...  '))}\r", end="", flush=True)
         except Exception as e:
+            if spinner_thread is not None:
+                stop_event.set()
+                spinner_thread.join(timeout=0.5)
+                print(f"\r{' ' * (len('  Thinking...  '))}\r", end="", flush=True)
             print(f"\nError: {e}\n", flush=True, file=sys.stderr)
 
 
