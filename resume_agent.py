@@ -287,11 +287,13 @@ DRAFT: The "current resume content" for this session is the draft. Generating co
 You have access to these tools:
 - load_profile(path): Load the user's profile from a file path
 - load_jd(path_or_url): Load a job description from a file path or URL
-- get_resume_content(profile_path, jd_path=None, skills_to_highlight=None, extra_instructions=None): Get tailored content from the LLM and store as draft; returns YAML for you to show. Does NOT create PDF. Use when the user wants to see content for approval first.
-- get_draft_content(): Return the current draft YAML. Use when the user asks to see the content for approval (if draft exists).
-- update_draft_content(yaml_content): Set the draft to the given YAML. Whenever you output revised resume YAML for the user's approval (e.g. after refining a section), you MUST call update_draft_content with the full refined YAML so the draft stays in sync.
-- generate_pdf_from_draft(output_format=None): Generate PDF (and optionally docx) from the current draft without calling the LLM. Use when the user is satisfied and asks to generate the PDF or "generate with this content". output_format: "pdf", "docx", or "both".
-- generate_resume(profile_path, jd_path=None, skills_to_highlight=None, extra_instructions=None, output_path=None, output_format=None): Fresh generation from profile + JD; writes LaTeX and compiles. Also updates the draft. Use only when the user wants a new run from profile (e.g. new job description or "regenerate from scratch").
+- generate_resume(profile_path, jd_path=None, skills_to_highlight=None, extra_instructions=None, output_path=None, output_format=None): Generate a tailored resume. output_format can be "pdf", "docx", or "both".
+
+When the user wants to generate a resume:
+1. Use their profile (default: my-content/user_profile.md unless they specify another path)
+2. Optionally use a job description if they provide one—either a file path or a public URL (e.g. https://example.com/job-posting). Use load_jd with the URL to fetch it, or pass the URL directly to generate_resume as jd_path.
+3. If they mention specific skills to emphasize (e.g. "highlight AWS and Kubernetes"), pass them as skills_to_highlight (comma-separated)
+4. If they give other instructions (e.g. "emphasize backend", "focus on leadership"), pass them as extra_instructions
 
 When the user wants to see content for approval: use get_draft_content() if draft exists; otherwise get_resume_content(...) first. When they refine a section and you produce revised YAML in your reply, call update_draft_content(full_refined_yaml). When they say they are satisfied and want the PDF, call generate_pdf_from_draft(output_format).
 
