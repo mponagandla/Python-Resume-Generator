@@ -2,7 +2,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-A YAML-driven resume generator CLI that compiles LaTeX (Awesome-CV) to PDF. Edit structured YAML content, run the tool, and get a professionally formatted resume.
+A YAML-driven resume generator CLI that compiles LaTeX (Awesome-CV) to PDF. Edit structured YAML content, run the tool, and get a professionally formatted resume. Please star this project to support me!
 
 ---
 
